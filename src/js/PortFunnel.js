@@ -31,9 +31,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-(function (scope) {
+export const PortFunnel = (function (scope) {
+    let PortFunnel = {};
+    let portNames = [];
 
-    PortFunnel = {};
     scope.PortFunnel = PortFunnel;
 
     PortFunnel.subscribe = subscribe; // called by HTML file
@@ -92,6 +93,7 @@
     // before the JavaScript module was installed.
     var queue = {};
     var queueDrainOutstanding = false;
+    var needReschedule = false;
 
     function scheduleQueueDrain() {
         queueDrainOutStanding = true;
@@ -127,5 +129,5 @@
             }
         }
     }
-
-}(this))
+    return PortFunnel;
+}(window));

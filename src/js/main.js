@@ -1,7 +1,5 @@
 import { Elm } from '../Main.elm';
-import PortFunnelGeolocation from './PortFunnel/Geolocation.js';
-
-const PortFunnel = require('./PortFunnel.js');
+import { PortFunnel } from "./PortFunnel.js";
 
 // Start the Elm application.
 let app = Elm.Main.init({

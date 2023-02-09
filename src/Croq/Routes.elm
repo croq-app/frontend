@@ -88,7 +88,8 @@ matchers =
             }
     in
     P.oneOf
-        [ P.map Home P.top
+        [ P.map Home (P.s "frontend") -- redirect from github-pages
+        , P.map Home P.top
 
         --- Generic pages
         , P.map GradeTool (P.s gradeToolSlug)
