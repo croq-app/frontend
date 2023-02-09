@@ -4,10 +4,13 @@ import Croq.Data.Loading as Loading exposing (LoadingHttp)
 import Croq.Data.Types exposing (..)
 import Croq.Routes as Routes
 import Croq.Ui.Color exposing (Color, colorString, fullColor)
-import Croq.Ui.Svg as Icons
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Material.Icons as I
+import Material.Icons.Outlined as IO
+import Material.Icons.Round as IR
+import Material.Icons.Types as I
 import Maybe.Extra as Maybe
 
 
@@ -33,7 +36,7 @@ appShell : Html msg -> Html msg
 appShell content =
     div
         [ class "bg-base w-100"
-        , attribute "data-theme" "lemonade"
+        , attribute "data-theme" "croq"
         ]
         [ navbar
         , main_ [] [ content ]
@@ -43,13 +46,13 @@ appShell content =
 navbar : Html msg
 navbar =
     let
-        icon svg =
-            button [ class "btn btn-square btn-ghost" ] [ svg ]
+        icon i =
+            button [ class "btn btn-square btn-ghost" ] [ i 24 I.Inherit ]
     in
     div
         [ class "navbar shadow-lg bg-primary primary-content"
         ]
-        [ div [ class "flex-none" ] [ icon Icons.menu ]
+        [ div [ class "flex-none" ] [ icon I.menu ]
         , div
             [ class "flex-1" ]
             [ a
@@ -59,7 +62,7 @@ navbar =
                 ]
                 [ text "croq.app" ]
             ]
-        , div [ class "flex-none" ] [ icon Icons.dots ]
+        , div [ class "flex-none" ] [ icon I.more_vert ]
         ]
 
 
@@ -72,7 +75,7 @@ btn attrs body =
 
 list : List (Attribute msg) -> (a -> Html msg) -> List a -> Html msg
 list attrs func items =
-    ul (class "list-disc pl-4":: attrs)
+    ul (class "list-disc pl-4" :: attrs)
         (List.map
             (func >> List.singleton >> li [])
             items
@@ -124,7 +127,7 @@ breadcrumbs : List ( Url, Name ) -> Html msg
 breadcrumbs links =
     div [ class "text-sm breadcrumbs" ]
         [ ul [] <|
-            (li [] [ a [ href Routes.homeUrl ] [ Icons.home ] ]
+            (li [] [ a [ href Routes.homeUrl ] [ IR.home 16 I.Inherit ] ]
                 :: List.map
                     (\( url, name ) ->
                         if url == "" then
