@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    --navbar-height: 4rem;
+    background: white;
+}
+
+.min-h-screen.with-navbar {
+    min-height: calc(100vh - var(--navbar-height));
+}
+
+.navbar {
+    padding-left: calc(45% - 16rem); 
+    padding-right: calc(45% - 16rem); 
+}

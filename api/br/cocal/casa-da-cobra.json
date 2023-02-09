@@ -1,0 +1,103 @@
+{
+    "region": {
+        "id": "br/cocal",
+        "name": "Cocalzinho",
+        "country": "Brasil",
+        "description": "Cocalzinho de Goiás",
+        "short_name": "Cocal",
+        "location": "-15.7778085192, -48.7921407225"
+    },
+    "sector": {
+        "id": "br/cocal/casa-da-cobra",
+        "name": "Casa da cobra",
+        "type": "boulder",
+        "location": "-15.7778085192, -48.7921407225",
+        "description": "Clássico de cocal",
+        "how_to_access": "Vá para o estacionamento tal e tal",
+        "tags": [
+            "easy_access",
+            "democratic"
+        ],
+        "boulders": [
+            {
+                "id": "br/cocal/casa-da-cobra/principal",
+                "name": "Bloco principal",
+                "short_name": "Principal",
+                "problems": [
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/completao",
+                        "name": "Completão",
+                        "description": "Boulder muito bem descrito. Saída no reglete, termina no troféu",
+                        "grade": "V8",
+                        "rating": 4,
+                        "location": "-15.7778085192, -48.7921407225",
+                        "face_to": "west",
+                        "height": 6,
+                        "year": 2003,
+                        "first_ascent": "Fulano Frango",
+                        "established_by": [
+                            "Fulano Monster",
+                            "Fulano Frango"
+                        ],
+                        "techniques": [
+                            "crimp"
+                        ],
+                        "warnings": [
+                            "bees"
+                        ],
+                        "videos": [
+                            "https://www.youtube.com/watch?v=auavdvlAUYI"
+                        ],
+                        "betas": [
+                            "Pega de invertida e faz um drop de esquerda na agarra da saída"
+                        ]
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/simplao",
+                        "name": "Simplão",
+                        "description": "Saída no garrão"
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/bem-vindo",
+                        "name": "Bem vindo",
+                        "grade": "V1"
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/so-no-calcanha",
+                        "name": "Só no calcanha",
+                        "grade": "V3"
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/maos-ao-alto",
+                        "name": "Mãos ao alto",
+                        "grade": "V2"
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/muy-expuesto",
+                        "name": "Muy expuesto",
+                        "grade": "V2",
+                        "description": "Saída no garrão"
+                    },
+                    {
+                        "id": "br/cocal/casa-da-cobra/principal/simplin",
+                        "name": "Simplin",
+                        "description": "Saída no garrão",
+                        "grade": "V5"
+                    }
+                ]
+            },
+            {
+                "id": "br/cocal/casa-da-cobra/secundário",
+                "name": "Bloco Secundário",
+                "short_name": "Secundário",
+                "problems": []
+            },
+            {
+                "id": "br/cocal/casa-da-cobra/bloco3",
+                "name": "Bloco 3",
+                "short_name": "3",
+                "problems": []
+            }
+        ]
+    }
+}

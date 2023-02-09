@@ -1,0 +1,45 @@
+{
+    "id": "br/cocal",
+    "name": "Cocalzinho",
+    "country": "Brasil",
+    "description": "Cocalzinho de Goiás",
+    "short_name": "Cocal",
+    "location": "-15.7778085192, -48.7921407225",
+    "how_to_access": "",
+    "attractions": [
+        {
+            "id": "br/cocal/cachu",
+            "name": "Cachu",
+            "description": "Cachu, cogu e natu",
+            "how_to_access": "Andando",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/cocal/natu",
+            "name": "Natu",
+            "description": "Trilhas e natu",
+            "how_to_access": "Andando",
+            "location": "-15.7778085192, -48.7921407225"
+        }
+    ],
+    "sectors": [
+        {
+            "id": "br/cocal/casa-da-cobra",
+            "name": "Casa da cobra",
+            "type": "boulder",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/cocal/cine",
+            "name": "Cine/Mocó",
+            "type": "boulder",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/cocal/alta-tensao",
+            "name": "Alta tensão",
+            "type": "boulder",
+            "location": "-15.7778085192, -48.7921407225"
+        }
+    ]
+}

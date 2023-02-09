@@ -1,0 +1,58 @@
+{
+    "region": {
+        "id": "br/belchi",
+        "name": "Pedra do Belchior",
+        "country": "Brasil",
+        "description": "Pedra do Belchior é um sítio em São Gabriel, blah blah",
+        "short_name": "Belchior",
+        "location": "-15.7778085192, -48.7921407225"
+    },
+    "sector": {
+        "id": "br/belchi/setor-l",
+        "name": "L",
+        "type": "route",
+        "location": "-15.7778085192, -48.7921407225",
+        "description": "Vias muito boas em belchi",
+        "how_to_access": "Pegue a trilha para a esquerda",
+        "tags": [
+            "bad_rescue",
+            "democratic"
+        ],
+        "routes": [
+            {
+                "id": "br/belchi/setor-l/flor-do-cerrado",
+                "name": "Flor do Cerrado",
+                "description": "Via clássica. Escolhida pro livro do Daflon",
+                "grade": "VIsupBR",
+                "rating": 5,
+                "location": "-15.7778085192, -48.7921407225",
+                "face_to": "west",
+                "height": 18,
+                "year": 1999,
+                "first_ascent": "Fulano Frango",
+                "established_by": [
+                    "Fulano Monster",
+                    "Fulano Frango"
+                ],
+                "techniques": [
+                    "crimp"
+                ],
+                "warnings": [
+                    "bees"
+                ],
+                "videos": [
+                    "https://www.youtube.com/watch?v=auavdvlAUYI"
+                ],
+                "betas": [
+                    "Pega de invertida e faz um drop de esquerda na agarra da saída"
+                ]
+            },
+            {
+                "id": "br/belchi/setor-l/andando-em-circulos",
+                "name": "Andando em círculos",
+                "description": "Saída no garrão",
+                "grade": "7a BR"
+            }
+        ]
+    }
+}

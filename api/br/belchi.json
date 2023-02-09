@@ -1,0 +1,45 @@
+{
+    "id": "br/belchi",
+    "name": "Pedra do Belchior",
+    "country": "Brasil",
+    "description": "Pedra do Belchior é um sítio em São Gabriel, blah blah",
+    "short_name": "Belchior",
+    "location": "-15.7778085192, -48.7921407225",
+    "how_to_access": "Vá para São Gabriel",
+    "attractions": [
+        {
+            "id": "br/belchi/cachu",
+            "name": "Cachu",
+            "description": "Cachu, cogu e natu",
+            "how_to_access": "Andando",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/belchi/vo-belmira",
+            "name": "Vó Belmira",
+            "description": "Pamonha e outras coisas",
+            "how_to_access": "São Gabriel",
+            "location": "-15.7778085192, -48.7921407225"
+        }
+    ],
+    "sectors": [
+        {
+            "id": "br/belchi/setor-l",
+            "name": "L",
+            "type": "route",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/belchi/tromba-dagua",
+            "name": "Tromba d'água",
+            "type": "route",
+            "location": "-15.7778085192, -48.7921407225"
+        },
+        {
+            "id": "br/belchi/salao-principal",
+            "name": "Salão principal",
+            "type": "route",
+            "location": "-15.7778085192, -48.7921407225"
+        }
+    ]
+}
