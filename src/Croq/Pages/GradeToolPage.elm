@@ -1,6 +1,5 @@
 module Croq.Pages.GradeToolPage exposing (Model, Msg, init, update, view)
 
-import Croq.Dbg exposing (repr)
 import Croq.Ui as Ui
 import Croq.Ui as Ui
 import Grades.Bouldering as Bouldering
@@ -67,7 +66,6 @@ viewBoulder st =
                 [ ( "Fontainebleau", Bouldering.showAs Bouldering.Fontainbleau )
                 , ( "Escala V", Bouldering.showAs Bouldering.VGrade )
                 , ( "Croq", Bouldering.toLinearScale >> String.fromFloat )
-                , ( "Debug", repr )
                 ]
             ]
         ]
@@ -96,7 +94,6 @@ viewRoute st =
                 , ( "FR", Climbing.showAs Climbing.FR )
                 , ( "BR", Climbing.showAs Climbing.BR )
                 , ( "Croq", Climbing.toLinearScale >> String.fromFloat )
-                , ( "Debug", repr )
                 ]
             ]
         ]

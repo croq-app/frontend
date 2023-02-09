@@ -2,8 +2,6 @@ port module Croq.Pages.GpsToolPage exposing (..)
 
 import Chart as C
 import Chart.Attributes as CA
-import Croq.Dbg exposing (dbg)
-import Croq.Ui as Ui
 import Croq.Ui as Ui
 import Dict exposing (Dict)
 import Html exposing (..)
@@ -120,10 +118,10 @@ update msg m =
                 PortFunnel.processValue funnels (PortFunnel.appProcess cmdPort) value m.state m
             of
                 Err error ->
-                    ( dbg { m | error = Just error }, Cmd.none )
+                    ( { m | error = Just error }, Cmd.none )
 
                 Ok res ->
-                    dbg res
+                    res
 
         OnTick t ->
             update OnRequestLocation <|

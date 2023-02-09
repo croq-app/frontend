@@ -1,7 +1,6 @@
 module Croq.Config exposing (..)
 
 import Browser.Navigation as Nav exposing (Key)
-import Croq.Dbg exposing (dbg)
 import Dict exposing (Dict)
 import Http exposing (Error(..))
 
@@ -40,7 +39,7 @@ pushUrl url m =
 
 pushErrorUrl : Error -> Model -> Cmd msg
 pushErrorUrl e m =
-    Nav.pushUrl m.navKey ("/error?msg=" ++ dbg (errorMsg e))
+    Nav.pushUrl m.navKey ("/error?msg=" ++ errorMsg e)
 
 
 errorMsg : Error -> String
