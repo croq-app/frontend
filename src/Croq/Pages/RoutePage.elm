@@ -9,6 +9,7 @@ import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
 import Croq.Ui as Ui
 import Croq.Ui.Carousel as Carousel
+import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Lazy exposing (lazy)
@@ -60,10 +61,10 @@ view _ m =
                     , Ui.title elem.name
                     , Ui.tags (Route.tags elem)
                     , Carousel.view carouselConfig [ "??", "??" ]
-                    , Ui.sections
+                    , Ui.sections []
                         [ ( "Descrição", [ lazy (Markdown.toHtml []) elem.description ] )
                         , ( "Vídeos"
-                          , [ Ui.urlList "Vazio" [ class "list-disc pl-6" ] (List.map (\x -> ( x, x )) elem.videos) ]
+                          , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) elem.videos ) ]
                           )
                         ]
                     ]

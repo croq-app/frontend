@@ -5,8 +5,7 @@ module Croq.Pages.TopoToolPage exposing (Model, Msg, init, subscriptions, update
 
 import BoundingBox2d as BB
 import Croq.Config as Cfg
-import Croq.Ui as Ui
-import Croq.Ui as Ui
+import Daisy.Elements as Ui
 import Dict exposing (Dict)
 import Draggable
 import Html exposing (..)
@@ -19,6 +18,7 @@ import TopoEdit.GeoUtils exposing (..)
 import TopoEdit.Types exposing (..)
 import TopoEdit.View
 import Vector2d as Vec
+import Croq.Ui exposing (appShell)
 
 
 type alias Msg =
@@ -124,7 +124,7 @@ update msg m =
 
 view : Cfg.Model -> Model -> Html Msg
 view _ m =
-    (Ui.appShell << Ui.container) <|
+    (appShell << Ui.container) <|
         [ Ui.title "Editor de croquis"
         , TopoEdit.View.toolbar m
         , TopoEdit.View.legend m

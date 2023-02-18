@@ -10,7 +10,8 @@ import Croq.Routes as Routes
 import Croq.Ui as Ui
 import Croq.Ui.Color as Color
 import Croq.Ui.SectorMap as Map
-import Croq.Ui.Tab as Tab
+import Daisy.Elements as Ui
+import Daisy.Tab as Tab
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)

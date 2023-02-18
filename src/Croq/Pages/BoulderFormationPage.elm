@@ -10,8 +10,9 @@ import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
 import Croq.Routes as Routes
 import Croq.Ui as Ui
-import Croq.Ui.Accordion as Accordion
 import Croq.Ui.Carousel as Carousel
+import Daisy.Accordion as Accordion
+import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Lazy exposing (lazy)
@@ -82,24 +83,23 @@ view _ m =
 accordionConfig : Accordion.Config ( Model, BoulderProblem ) Msg
 accordionConfig =
     Accordion.config
-        { toMsg = OnAccordionUpdate
-        , render =
-            \( _, problem ) ->
-                div []
-                    [ dl []
-                        [ dt [] [ text "Grau:" ]
-                        , dd [] [ text (showGrade problem) ]
-                        , dt [] [ text "Descrição:" ]
-                        , dd [] [ lazy (Markdown.toHtml []) problem.description ]
-                        ]
-                    , a
-                        [ href (Routes.boulderProblemUrl problem.id)
-                        , class "btn glass w-full btn-accent"
-                        ]
-                        [ text "Ver detalhes" ]
+        OnAccordionUpdate
+        (\( _, problem ) -> problem.name ++ " (" ++ showGrade problem ++ ")")
+        (\( _, problem ) ->
+            div []
+                [ dl []
+                    [ dt [] [ text "Grau:" ]
+                    , dd [] [ text (showGrade problem) ]
+                    , dt [] [ text "Descrição:" ]
+                    , dd [] [ lazy (Markdown.toHtml []) problem.description ]
                     ]
-        , title = \( _, problem ) -> problem.name ++ " (" ++ showGrade problem ++ ")"
-        }
+                , a
+                    [ href (Routes.boulderProblemUrl problem.id)
+                    , class "btn glass w-full btn-accent"
+                    ]
+                    [ text "Ver detalhes" ]
+                ]
+        )
 
 
 carouselConfig : Carousel.Config String msg

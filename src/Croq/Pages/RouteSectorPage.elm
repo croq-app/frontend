@@ -13,8 +13,9 @@ import Croq.Ui as Ui
 import Croq.Ui.BoulderMap as Map
 import Croq.Ui.Color as Color
 import Croq.Ui.Histogram as Histogram
-import Croq.Ui.Tab as Tab exposing (Msg(..))
 import Croq.Util exposing (maybeCompare, maybeShow)
+import Daisy.Elements as Ui
+import Daisy.Tab as Tab exposing (Msg(..))
 import Grades.Climbing as Climbing
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -133,7 +134,7 @@ viewInfo m =
                         |> List.sortWith (\( x, _ ) ( y, _ ) -> maybeCompare Climbing.compare x y)
                         |> List.map (\( x, y ) -> ( Maybe.map Climbing.show x |> Maybe.withDefault "∅", toFloat y ))
             in
-            Ui.sections
+            Ui.sections []
                 [ ( "Descrição", [ lazy (Markdown.toHtml []) sector.description ] )
                 , ( "Distribuição de graus", [ Html.map OnHistogramMsg (Histogram.view m.histogram histData) ] )
                 , ( "Lista de problemas", [ Table.view tableConfig m.table sector.routes ] )

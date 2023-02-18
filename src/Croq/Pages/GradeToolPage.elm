@@ -1,7 +1,7 @@
 module Croq.Pages.GradeToolPage exposing (Model, Msg, init, update, view)
 
 import Croq.Ui as Ui
-import Croq.Ui as Ui
+import Daisy.Elements as Ui
 import Grades.Bouldering as Bouldering
 import Grades.Climbing as Climbing
 import Html exposing (..)

@@ -9,6 +9,7 @@ import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
 import Croq.Ui as Ui
 import Croq.Ui.Carousel as Carousel
+import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Lazy exposing (lazy)
@@ -61,11 +62,11 @@ view _ m =
                     , Ui.title problem.name
                     , Ui.tags (BoulderProblem.tags problem)
                     , Carousel.view carouselConfig [ "??", "??" ]
-                    , Ui.sections
+                    , Ui.sections []
                         [ ( "Bloco", [ text elem.name ] )
                         , ( "Descrição/Saída", [ lazy (Markdown.toHtml []) problem.description ] )
                         , ( "Vídeos"
-                          , [ Ui.urlList "Vazio" [ class "list-disc pl-6" ] (List.map (\x -> ( x, x )) problem.videos) ]
+                          , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) problem.videos ) ]
                           )
                         ]
                     ]

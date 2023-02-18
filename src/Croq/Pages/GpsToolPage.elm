@@ -3,6 +3,7 @@ port module Croq.Pages.GpsToolPage exposing (..)
 import Chart as C
 import Chart.Attributes as CA
 import Croq.Ui as Ui
+import Daisy.Elements as Ui
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)

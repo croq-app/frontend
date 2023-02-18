@@ -16,7 +16,7 @@ import Maybe.Extra as Maybe
 type alias Climbable id grade extra =
     { id : id
     , name : Name 
-    -- , shortName: String
+    -- , shortName: Name
     , description : Text
     , grade : Maybe grade
     , rating : Maybe Rating

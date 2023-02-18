@@ -8,7 +8,6 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Material.Icons as I
-import Material.Icons.Outlined as IO
 import Material.Icons.Round as IR
 import Material.Icons.Types as I
 import Maybe.Extra as Maybe
@@ -66,20 +65,12 @@ navbar =
         ]
 
 
-{-| A simple button
--}
-btn : List (Attribute msg) -> List (Html msg) -> Html msg
-btn attrs body =
-    button (attrs ++ []) body
-
-
-list : List (Attribute msg) -> (a -> Html msg) -> List a -> Html msg
-list attrs func items =
-    ul (class "list-disc pl-4" :: attrs)
-        (List.map
-            (func >> List.singleton >> li [])
-            items
-        )
+actionBtn : List (Attribute msg) -> List (Html msg) -> Html msg
+actionBtn attrs body =
+    div [ class "my-4 text-primary font-bold text-[1.0625rem]" ]
+        [ a (class "" :: attrs) body
+        , span [ class "px-2" ] [ text " →" ]
+        ]
 
 
 {-| A simple rounded counter with specific color
@@ -158,73 +149,3 @@ skipLastBreadcrumb lst =
 
         p :: ps ->
             p :: skipLastBreadcrumb ps
-
-
-tag : String -> Html msg
-tag txt =
-    span [ class "badge badge-outline badge-primary" ] [ text txt ]
-
-
-tags : List String -> Html msg
-tags xs =
-    div [ class "space-x-1" ] (List.map tag xs)
-
-
-container : List (Html msg) -> Html msg
-container content =
-    div [ class "mx-auto px-4 my-2 max-w-lg" ] content
-
-
-title : String -> Html msg
-title txt =
-    h1 [ class "font-bold text-xl mb-2" ] [ text txt ]
-
-
-link : Url -> List (Attribute msg)
-link url =
-    if String.startsWith "/" url then
-        [ href url ]
-
-    else
-        [ href url, target "blank_" ]
-
-
-sections : List ( String, List (Html msg) ) -> Html msg
-sections data =
-    let
-        item ( st, children ) =
-            [ dt [ class "text-lg font-bold my-2" ] [ text st ]
-            , dd [ class "mb-4" ] children
-            ]
-    in
-    dl []
-        (data
-            |> List.filter (Tuple.second >> (/=) [])
-            |> List.map item
-            |> List.concat
-        )
-
-
-urlList : String -> List (Attribute msg) -> List ( Url, String ) -> Html msg
-urlList empty attrs items =
-    case items of
-        [] ->
-            text empty
-
-        _ ->
-            ul attrs (List.map (\( url, txt ) -> li [] [ a (link url) [ text txt ] ]) items)
-
-
-shortPlaceholder : String
-shortPlaceholder =
-    "░░░░░ ░ ░░░░"
-
-
-longPlaceholder : String
-longPlaceholder =
-    "░░░░░ ░ ░░░░ ░░░░ ░░░ ░░ ░░░░░ ░ ░░░░ ░ ░░░░ ░░░ ░░░ ░░░░ ░░░ ░░ ░░░░░ ░ ░░░░ ░ ░░░░"
-
-
-loremIpsum : String
-loremIpsum =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."

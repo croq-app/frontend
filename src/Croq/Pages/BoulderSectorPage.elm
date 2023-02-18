@@ -11,11 +11,12 @@ import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest, sectorGet, viewAccess)
 import Croq.Routes as Routes
 import Croq.Ui as Ui
-import Croq.Ui.Accordion as Accordion
 import Croq.Ui.BoulderMap as Map
 import Croq.Ui.Histogram as Histogram
-import Croq.Ui.Tab as Tab exposing (Msg(..))
 import Croq.Util exposing (maybeCompare, maybeCompareLast, maybeShow)
+import Daisy.Accordion as Accordion
+import Daisy.Elements as Ui
+import Daisy.Tab as Tab exposing (Msg(..))
 import Grades.Bouldering as Bouldering
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -132,7 +133,7 @@ viewInfo m =
                         |> List.sortWith (\( x, _ ) ( y, _ ) -> maybeCompare Bouldering.compare x y)
                         |> List.map (\( x, y ) -> ( Maybe.map Bouldering.show x |> Maybe.withDefault "∅", toFloat y ))
             in
-            Ui.sections
+            Ui.sections []
                 [ ( "Descrição", [ lazy (Markdown.toHtml []) sector.description ] )
                 , ( "Distribuição de graus", [ Html.map OnHistogramMsg (Histogram.view m.histogram histData) ] )
                 , ( "Lista de problemas", [ Table.view tableConfig m.table problems ] )
@@ -149,8 +150,8 @@ viewFormation boulder =
             List.sortWith cmp boulder.problems
     in
     div []
-        [ Ui.list [] (showWithGrade >> text) problems
-        , Accordion.actionButton
+        [ Ui.list (showWithGrade >> text) [] problems
+        , Ui.actionBtn
             [ href (Routes.boulderFormationUrl boulder.id) ]
             [ text "Ir para o bloco" ]
         ]
@@ -207,7 +208,4 @@ tableConfig =
 
 accordionConfig : Accordion.Config BoulderFormation.BoulderFormation Msg
 accordionConfig =
-    { toMsg = OnAccordionMsg
-    , render = viewFormation
-    , title = .name
-    }
+    Accordion.config OnAccordionMsg .name viewFormation

@@ -28,6 +28,7 @@
             "elm-community/string-extra": "4.0.1",
             "elm-explorations/markdown": "1.0.0",
             "fabiommendes/elm-climbing-grades": "1.1.0",
+            "fabiommendes/elm-daisy-ui": "1.0.0",
             "fabiommendes/elm-latlng": "1.1.0",
             "ianmackenzie/elm-geometry": "3.9.1",
             "ianmackenzie/elm-geometry-svg": "3.0.0",
