@@ -1,12 +1,14 @@
 import { Elm } from '../Main.elm';
 import { PortFunnel } from "./PortFunnel.js";
 
+
 // Start the Elm application.
 let app = Elm.Main.init({
     node: document.querySelector('main'),
+    flags: window.location.hostname,
 });
 
-PortFunnel.subscribe(app, { modules: ["Geolocation "] });
+PortFunnel.subscribe(app, { modules: ["Geolocation"] });
 
 
 // Start service workers

@@ -6,19 +6,29 @@ import Http exposing (Error(..))
 
 
 type alias Model =
-    { navKey : Key, api : String, translations : Dict String String }
+    { navKey : Key, api : String, static : String, translations : Dict String String }
 
 
 type Msg
     = NoOp
 
 
-init : Key -> Model
-init key =
-    { navKey = key
-    , api = "/api/"
-    , translations = Dict.empty
-    }
+init : String -> Key -> Model
+init hostname key =
+    case hostname of
+        "croq-app.github.io" ->
+            { navKey = key
+            , api = "/frontend/api/"
+            , static = "/frontend/static/"
+            , translations = Dict.empty
+            }
+
+        _ ->
+            { navKey = key
+            , api = "/api/"
+            , static = "/static/"
+            , translations = Dict.empty
+            }
 
 
 tr : Model -> String -> String

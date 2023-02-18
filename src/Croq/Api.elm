@@ -11,6 +11,11 @@ url cfg rest =
     cfg.api ++ String.unsurround "/" rest
 
 
+static : Cfg.Model -> String -> Url
+static cfg rest =
+    cfg.static ++ String.unsurround "/" rest
+
+
 regionUrl : Cfg.Model -> RegionId -> Url
 regionUrl cfg id =
     url cfg <| showRegionId id ++ ".json"
@@ -19,8 +24,3 @@ regionUrl cfg id =
 sectorUrl : Cfg.Model -> SectorId -> Url
 sectorUrl cfg id =
     url cfg <| showSectorId id ++ ".json"
-
-
-static : Cfg.Model -> String -> String
-static _ part =
-    "/static/" ++ part

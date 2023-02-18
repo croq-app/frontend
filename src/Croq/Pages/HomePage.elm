@@ -6,6 +6,7 @@ import Croq.Routes as Routes
 import Croq.Ui as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Croq.Api exposing (static)
 
 
 type Model
@@ -26,13 +27,13 @@ update _ m =
     ( m, Cmd.none )
 
 
-view : Model -> Html Msg
-view _ =
+view : Cfg.Model -> Model -> Html Msg
+view cfg _ =
     Ui.appShell <|
         div []
             [ div
                 [ class "hero min-h-screen with-navbar"
-                , style "background-image" "url(/static/hero-image.png)"
+                , style "background-image" ("url(" ++ static cfg "hero-image.png" ++ ")")
                 ]
                 [ div
                     [ class "hero-overlay bg-opacity-30" ]

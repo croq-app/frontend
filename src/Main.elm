@@ -18,7 +18,6 @@ import Croq.Pages.SimplePage as Playground
 import Croq.Pages.TopoToolPage as TopoTool
 import Croq.Routes exposing (Route(..), parseUrl)
 import Html exposing (Html, div, text)
-import Json.Encode exposing (Value)
 import Url exposing (Url)
 
 
@@ -120,7 +119,7 @@ view : Model -> Html Msg
 view model =
     case model.page of
         HomePage m ->
-            Html.map OnHomeMsg (Home.view m)
+            Html.map OnHomeMsg (Home.view model.cfg m)
 
         RegionPage m ->
             Html.map OnRegionMsg (Region.view model.cfg m)
@@ -242,11 +241,11 @@ subscriptions model =
         ]
 
 
-main : Program Value Model Msg
+main : Program String Model Msg
 main =
     let
-        initFn _ url key =
-            update (OnUrlChange url) (init (Cfg.init key))
+        initFn hostname url key =
+            update (OnUrlChange url) (init (Cfg.init hostname key))
     in
     Browser.application
         { init = initFn
