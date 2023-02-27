@@ -1,4 +1,11 @@
-module Croq.Data.BoulderFormation exposing (BoulderFormation, BoulderInfo, decoder, encoder, isGraded, infos)
+module Croq.Data.BoulderFormation exposing
+    ( BoulderFormation
+    , BoulderInfo
+    , decoder
+    , encoder
+    , infos
+    , isGraded
+    )
 
 import Croq.Data.BoulderProblem as BoulderProblem exposing (BoulderProblem)
 import Croq.Data.Id as Id

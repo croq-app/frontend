@@ -41,13 +41,12 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    Ui.appShell cfg <|
-        Ui.container
-            [ Ui.title "Conversão de graus"
-            , viewBoulder m.boulder
-            , viewRoute m.route
-            ]
+view _ m =
+    Ui.container
+        [ Ui.title "Conversão de graus"
+        , viewBoulder m.boulder
+        , viewRoute m.route
+        ]
 
 
 viewBoulder : String -> Html Msg

@@ -1,10 +1,11 @@
-module Croq.Pages.SimplePage exposing (Model, Msg, init, update, view, subscriptions)
+module Croq.Pages.SimplePage exposing (Model, Msg, init, subscriptions, update, view)
 
 {-| Example bare bones page
 -}
 
 import Croq.Config as Cfg
 import Croq.Ui as Ui
+import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
@@ -35,6 +36,6 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg _ =
-    Ui.appShell cfg <|
-        div [] [ text "Example page, Nothing to see here" ]
+view _ _ =
+    Ui.container <|
+        [ text "Example page, Nothing to see here" ]

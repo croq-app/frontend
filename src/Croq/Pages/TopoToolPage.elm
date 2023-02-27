@@ -4,7 +4,6 @@ module Croq.Pages.TopoToolPage exposing (Model, Msg, config, init, subscriptions
 -}
 
 import Croq.Config as Cfg
-import Croq.Ui exposing (appShell)
 import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -57,8 +56,8 @@ subscriptions m =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    (appShell cfg << Ui.container) <|
+view _ m =
+    Ui.container <|
         [ Ui.title "Editor de croquis"
         , Html.map OnEditorMsg <| Editor.view config m.editor
         ]

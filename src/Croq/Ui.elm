@@ -7,6 +7,8 @@ import Croq.Data.Types exposing (..)
 import Croq.Routes as Routes
 import Croq.Ui.Color exposing (Color, colorString, fullColor)
 import Daisy.Elements as Ui
+import Grades.Bouldering
+import Grades.Climbing
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -30,29 +32,69 @@ viewOptional =
     Maybe.unwrap (text "")
 
 
-appShell : Cfg.Model -> Html msg -> Html msg
-appShell cfg content =
+appShell : Cfg.Model -> (Cfg.Msg -> msg) -> (msgContent -> msg) -> Html msgContent -> Html msg
+appShell cfg onCfg onContent content =
     div [ class "bg-base w-100", attribute "data-theme" "croq" ]
         [ navbar
         , main_
             [ class "drawer drawer-mobile content-height overflow-y" ]
             [ input [ id "app-drawer", type_ "checkbox", class "drawer-toggle" ] []
             , div [ class "drawer-content" ]
-                [ content ]
+                [ Html.map onContent content ]
             , div [ class "drawer-side" ]
                 [ label [ for "app-drawer", class "drawer-overlay" ] []
-                , drawer cfg
+                , Html.map onCfg (drawer cfg)
                 ]
             ]
         ]
 
 
-drawer : Cfg.Model -> Html msg
+drawer : Cfg.Model -> Html Cfg.Msg
 drawer cfg =
     div [ class "p-4 w-64 md:w-80 lg:w-90 bg-base-100 lg:bg-base-200 text-base-content flex flex-col content-height fixed" ]
-        [ Ui.list text [ class "menu" ] [ "Grau (Via)", "Grau (Boulder)" ]
+        [ div [ class "flex flex-col" ]
+            [ label [ class "py-2" ] [ text "Grau (Via)" ]
+            , routeGradeSystemSelector cfg
+            ]
+        , div [ class "flex flex-col mt-4" ]
+            [ label [ class "py-2" ] [ text "Grau (Boulder)" ]
+            , boulderGradeSystemSelector cfg
+            ]
         , div [ class "flex-1" ] []
         , a (class "block mb-4 mx-auto w-12" :: Ui.link "http://github.com/croq-app/frontend") [ img [ alt "github.com", src (Api.static cfg "img/github.svg") ] [] ]
+        ]
+
+
+routeGradeSystemSelector : Cfg.Model -> Html Cfg.Msg
+routeGradeSystemSelector cfg =
+    let
+        select sys =
+            if sys == cfg.climbingGrades then
+                [ class "btn-active", onClick (Cfg.OnSetClimbingGrades sys) ]
+
+            else
+                [ onClick (Cfg.OnSetClimbingGrades sys) ]
+    in
+    div [ class "btn-group w-full" ]
+        [ div (class "btn w-16 btn-sm" :: select Grades.Climbing.BR) [ text "BR" ]
+        , div (class "btn w-16 btn-sm" :: select Grades.Climbing.FR) [ text "FR" ]
+        , div (class "btn w-16 btn-sm" :: select Grades.Climbing.US) [ text "US" ]
+        ]
+
+
+boulderGradeSystemSelector : Cfg.Model -> Html Cfg.Msg
+boulderGradeSystemSelector cfg =
+    let
+        select sys =
+            if sys == cfg.boulderingGrades then
+                [ class "btn-active", onClick (Cfg.OnSetBoulderingGrades sys) ]
+
+            else
+                [ onClick (Cfg.OnSetBoulderingGrades sys) ]
+    in
+    div [ class "btn-group w-full" ]
+        [ div (class "btn btn-sm" :: select Grades.Bouldering.VGrade) [ text "Hueco" ]
+        , div (class "btn btn-sm" :: select Grades.Bouldering.Fontainbleau) [ text "Fontainbleau" ]
         ]
 
 

@@ -50,7 +50,7 @@ entry : Cfg.Model -> SectorId -> ( Model, Cmd Msg )
 entry cfg id =
     ( { id = id
       , data = Loading.Pending
-      , tab = Tab.init tabConfig
+      , tab = Tab.init (tabConfig cfg)
       , map = Map.init
       , table = Table.initialSort "Grau"
       , histogram = Histogram.init
@@ -93,17 +93,16 @@ subscriptions _ =
 
 view : Cfg.Model -> Model -> Html Msg
 view cfg m =
-    Ui.appShell cfg <|
-        Ui.container
-            [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
-            , Ui.title <| sectorGet .name "Carregando setor..." m
-            , Ui.tags <| sectorGet (.tags >> List.map Sector.renderTag) [] m
-            , Tab.view tabConfig m.tab m
-            ]
+    Ui.container
+        [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
+        , Ui.title <| sectorGet .name "Carregando setor..." m
+        , Ui.tags <| sectorGet (.tags >> List.map Sector.renderTag) [] m
+        , Tab.view (tabConfig cfg) m.tab m
+        ]
 
 
-viewRoutes : Model -> Html Msg
-viewRoutes m =
+viewRoutes : Cfg.Model -> Model -> Html Msg
+viewRoutes _ m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             let
@@ -129,8 +128,8 @@ viewRoutes m =
                 ]
 
 
-viewInfo : Model -> Html Msg
-viewInfo m =
+viewInfo : Cfg.Model -> Model -> Html Msg
+viewInfo _ m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             let
@@ -150,13 +149,13 @@ viewInfo m =
                 ]
 
 
-tabConfig : Tab.Config Model Msg
-tabConfig =
+tabConfig : Cfg.Model -> Tab.Config Model Msg
+tabConfig cfg =
     Tab.Config
         OnTabMsg
-        [ ( "Map", viewRoutes )
-        , ( "Sobre", viewInfo )
-        , ( "Acesso", viewAccess )
+        [ ( "Map", viewRoutes cfg )
+        , ( "Sobre", viewInfo cfg )
+        , ( "Acesso", viewAccess cfg )
         ]
 
 

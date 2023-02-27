@@ -2,15 +2,25 @@ module Croq.Config exposing (..)
 
 import Browser.Navigation as Nav exposing (Key)
 import Dict exposing (Dict)
+import Grades.Bouldering
+import Grades.Climbing
 import Http exposing (Error(..))
 
 
 type alias Model =
-    { navKey : Key, api : String, static : String, translations : Dict String String }
+    { navKey : Key
+    , api : String
+    , static : String
+    , translations : Dict String String
+    , boulderingGrades : Grades.Bouldering.System
+    , climbingGrades : Grades.Climbing.System
+    }
 
 
 type Msg
     = NoOp
+    | OnSetBoulderingGrades Grades.Bouldering.System
+    | OnSetClimbingGrades Grades.Climbing.System
 
 
 init : String -> Key -> Model
@@ -21,6 +31,8 @@ init hostname key =
             , api = "/frontend/api/"
             , static = "/frontend/static/"
             , translations = Dict.empty
+            , boulderingGrades = Grades.Bouldering.VGrade
+            , climbingGrades = Grades.Climbing.BR
             }
 
         _ ->
@@ -28,18 +40,42 @@ init hostname key =
             , api = "/api/"
             , static = "/static/"
             , translations = Dict.empty
+            , boulderingGrades = Grades.Bouldering.VGrade
+            , climbingGrades = Grades.Climbing.BR
             }
 
 
-tr : Model -> String -> String
-tr m st =
+translate : Model -> String -> String
+translate m st =
     Dict.get st m.translations
         |> Maybe.withDefault st
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update _ m =
-    ( m, Cmd.none )
+update msg_ m =
+    let
+        return m_ =
+            ( m_, Cmd.none )
+    in
+    case msg_ of
+        NoOp ->
+            return m
+
+        OnSetBoulderingGrades sys ->
+            return { m | boulderingGrades = sys }
+
+        OnSetClimbingGrades sys ->
+            return { m | climbingGrades = sys }
+
+
+showBoulderingGrade : Model -> Grades.Bouldering.Grade -> String
+showBoulderingGrade cfg grade =
+    Grades.Bouldering.showAs cfg.boulderingGrades grade
+
+
+showClimbingGrade : Model -> Grades.Climbing.Grade -> String
+showClimbingGrade cfg grade =
+    Grades.Climbing.showAs cfg.climbingGrades grade
 
 
 pushUrl : String -> Model -> Cmd msg

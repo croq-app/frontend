@@ -1,4 +1,4 @@
-module Croq.Pages.BoulderProblemPage exposing (Model, Msg, entry, update, view, subscriptions)
+module Croq.Pages.BoulderProblemPage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Config as Cfg
 import Croq.Data.BoulderProblem as BoulderProblem
@@ -57,17 +57,16 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    Ui.appShell cfg <|
-        Ui.viewLoading m.data <|
-            \{ problem, elem } ->
-                Ui.container
-                    [ Ui.breadcrumbs (Region.problemBreadcrumbs m)
-                    , Ui.title problem.name
-                    , Ui.tags (BoulderProblem.tags problem)
-                    , Carousel.view carouselConfig [ "??", "??" ]
-                    , Ui.sections [] (( "Bloco", [ text elem.name ] ) :: Climbable.sections problem)
-                    ]
+view _ m =
+    Ui.viewLoading m.data <|
+        \{ problem, elem } ->
+            Ui.container
+                [ Ui.breadcrumbs (Region.problemBreadcrumbs m)
+                , Ui.title problem.name
+                , Ui.tags (BoulderProblem.tags problem)
+                , Carousel.view carouselConfig [ "??", "??" ]
+                , Ui.sections [] (( "Bloco", [ text elem.name ] ) :: Climbable.sections problem)
+                ]
 
 
 carouselConfig : Carousel.Config String msg

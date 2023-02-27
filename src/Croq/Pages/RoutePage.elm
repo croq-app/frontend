@@ -1,4 +1,4 @@
-module Croq.Pages.RoutePage exposing (Model, Msg, entry, update, view, subscriptions)
+module Croq.Pages.RoutePage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Config as Cfg
 import Croq.Data.Id exposing (..)
@@ -57,22 +57,21 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    Ui.appShell cfg <|
-        Ui.viewLoading m.data <|
-            \{ elem } ->
-                Ui.container
-                    [ Ui.breadcrumbs (Region.routeBreadcrumbs m)
-                    , Ui.title elem.name
-                    , Ui.tags (Route.tags elem)
-                    , Carousel.view carouselConfig [ "??", "??" ]
-                    , Ui.sections []
-                        [ ( "Descrição", [ lazy (Markdown.toHtml []) elem.description ] )
-                        , ( "Vídeos"
-                          , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) elem.videos ) ]
-                          )
-                        ]
+view _ m =
+    Ui.viewLoading m.data <|
+        \{ elem } ->
+            Ui.container
+                [ Ui.breadcrumbs (Region.routeBreadcrumbs m)
+                , Ui.title elem.name
+                , Ui.tags (Route.tags elem)
+                , Carousel.view carouselConfig [ "??", "??" ]
+                , Ui.sections []
+                    [ ( "Descrição", [ lazy (Markdown.toHtml []) elem.description ] )
+                    , ( "Vídeos"
+                      , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) elem.videos ) ]
+                      )
                     ]
+                ]
 
 
 carouselConfig : Carousel.Config String msg

@@ -1,4 +1,4 @@
-module Croq.Pages.BoulderSectorPage exposing (Model, Msg, entry, update, view, subscriptions)
+module Croq.Pages.BoulderSectorPage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Config as Cfg
 import Croq.Data.BoulderFormation as BoulderFormation exposing (BoulderFormation)
@@ -57,7 +57,7 @@ entry cfg id =
       , data = Loading.Pending
       , selectedFormation = Nothing
       , accordion = Accordion.init
-      , tab = Tab.init tabConfig
+      , tab = Tab.init (tabConfig cfg)
       , map = Map.init
       , table = Table.initialSort "Grau"
       , histogram = Histogram.init
@@ -106,41 +106,41 @@ subscriptions _ =
 
 view : Cfg.Model -> Model -> Html Msg
 view cfg m =
-    Ui.appShell cfg <|
-        Ui.container
-            [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
-            , Ui.title <| sectorGet .name "Carregando setor..." m
-            , Ui.tags <| sectorGet (.tags >> List.map Sector.renderTag) [] m
-            , Tab.view tabConfig m.tab m
-            ]
+    Ui.container
+        [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
+        , Ui.title <| sectorGet .name "Carregando setor..." m
+        , Ui.tags <| sectorGet (.tags >> List.map Sector.renderTag) [] m
+        , Tab.view (tabConfig cfg) m.tab m
+        ]
 
 
-viewBoulders : Model -> Html Msg
-viewBoulders m =
+viewBoulders : Cfg.Model -> Model -> Html Msg
+viewBoulders cfg m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             div []
                 [ Html.map OnMapMsg (Map.view m.map)
-                , Accordion.view accordionConfig m.accordion sector.boulders
+                , Accordion.view (accordionConfig cfg) m.accordion sector.boulders
                 ]
 
 
-viewInfo : Model -> Html Msg
-viewInfo m =
+viewInfo : Cfg.Model -> Model -> Html Msg
+viewInfo cfg m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             let
                 problems =
                     infos m
+                        |> List.map (Tuple.pair cfg)
 
                 histData =
                     problems
-                        |> List.map (.problem >> .grade >> Maybe.map Bouldering.simplify)
+                        |> List.map (Tuple.second >> .problem >> .grade >> Maybe.map Bouldering.simplify)
                         |> List.sortWith (maybeCompare Bouldering.compare)
                         |> List.group
                         |> List.map (\( x, y ) -> ( x, 1 + List.length y ))
                         |> List.sortWith (\( x, _ ) ( y, _ ) -> maybeCompare Bouldering.compare x y)
-                        |> List.map (\( x, y ) -> ( Maybe.map Bouldering.show x |> Maybe.withDefault "∅", toFloat y ))
+                        |> List.map (\( x, y ) -> ( Maybe.map (Cfg.showBoulderingGrade cfg) x |> Maybe.withDefault "∅", toFloat y ))
             in
             Ui.sections []
                 [ ( "Descrição", [ lazy (Markdown.toHtml []) sector.description ] )
@@ -149,8 +149,8 @@ viewInfo m =
                 ]
 
 
-viewFormation : BoulderFormation -> Html Msg
-viewFormation boulder =
+viewFormation : Cfg.Model -> BoulderFormation -> Html Msg
+viewFormation cfg boulder =
     let
         cmp x y =
             maybeCompareLast Bouldering.compare x.grade y.grade
@@ -159,7 +159,7 @@ viewFormation boulder =
             List.sortWith cmp boulder.problems
     in
     div []
-        [ Ui.list (showWithGrade >> text) [] problems
+        [ Ui.list (showWithGrade cfg >> text) [] problems
         , Ui.actionBtn
             [ href (Routes.boulderFormationUrl boulder.id) ]
             [ text "Ir para o bloco" ]
@@ -181,30 +181,31 @@ infos m =
                 |> Maybe.withDefault []
 
 
-tabConfig : Tab.Config Model Msg
-tabConfig =
+tabConfig : Cfg.Model -> Tab.Config Model Msg
+tabConfig cfg =
     Tab.Config
         OnTabMsg
-        [ ( "Blocos", viewBoulders )
-        , ( "Sobre", viewInfo )
-        , ( "Acesso", viewAccess )
+        [ ( "Blocos", viewBoulders cfg )
+        , ( "Sobre", viewInfo cfg )
+        , ( "Acesso", viewAccess cfg )
         ]
 
 
-tableConfig : Table.Config BoulderFormation.BoulderInfo Msg
+tableConfig : Table.Config ( Cfg.Model, BoulderFormation.BoulderInfo ) Msg
 tableConfig =
     Table.customConfig
-        { toId = .problem >> .name
+        { toId = Tuple.second >> .problem >> .name
         , toMsg = OnTableUpdate
         , columns =
-            [ Table.stringColumn "Name" (.problem >> .name)
-            , Table.stringColumn "Bloco" (.formation >> .name)
+            [ Table.stringColumn "Name" (Tuple.second >> .problem >> .name)
+            , Table.stringColumn "Bloco" (Tuple.second >> .formation >> .name)
             , Table.customColumn
                 { name = "Grau"
-                , viewData = .problem >> .grade >> maybeShow Bouldering.show
+                , viewData = \( cfg, { problem } ) -> maybeShow (Cfg.showBoulderingGrade cfg) problem.grade
                 , sorter =
                     Table.increasingOrDecreasingBy
-                        (.problem
+                        (Tuple.second
+                            >> .problem
                             >> .grade
                             >> Maybe.map Bouldering.toLinearScale
                             >> Maybe.withDefault 0
@@ -215,6 +216,6 @@ tableConfig =
         }
 
 
-accordionConfig : Accordion.Config BoulderFormation.BoulderFormation Msg
-accordionConfig =
-    Accordion.config OnAccordionMsg .name viewFormation
+accordionConfig : Cfg.Model -> Accordion.Config BoulderFormation.BoulderFormation Msg
+accordionConfig cfg =
+    Accordion.config OnAccordionMsg .name (viewFormation cfg)

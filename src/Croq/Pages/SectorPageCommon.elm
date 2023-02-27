@@ -13,8 +13,8 @@ import Html.Events exposing (..)
 import Http
 
 
-viewAccess : { m | data : LoadingHttp SectorCur } -> Html msg
-viewAccess m =
+viewAccess : Cfg.Model -> { m | data : LoadingHttp SectorCur } -> Html msg
+viewAccess _ m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             div []

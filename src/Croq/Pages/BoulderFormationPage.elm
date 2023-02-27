@@ -76,25 +76,24 @@ view cfg m =
         info =
             List.map (\x -> ( m, x )) (Loading.unwrap [] (.elem >> .problems) m.data)
     in
-    Ui.appShell cfg <|
-        Ui.container
-            [ Ui.breadcrumbs (Region.boulderFormationBreadcrumbs m)
-            , Ui.title "Bloco do Fax"
-            , Carousel.view carouselConfig [ "foo", "bar", "baz" ]
-            , Accordion.view accordionConfig m.accordion info
-            ]
+    Ui.container
+        [ Ui.breadcrumbs (Region.boulderFormationBreadcrumbs m)
+        , Ui.title "Bloco do Fax"
+        , Carousel.view carouselConfig [ "foo", "bar", "baz" ]
+        , Accordion.view (accordionConfig cfg) m.accordion info
+        ]
 
 
-accordionConfig : Accordion.Config ( Model, BoulderProblem ) Msg
-accordionConfig =
+accordionConfig : Cfg.Model -> Accordion.Config ( Model, BoulderProblem ) Msg
+accordionConfig cfg =
     Accordion.config
         OnAccordionUpdate
-        (\( _, problem ) -> problem.name ++ " (" ++ showGrade problem ++ ")")
+        (\( _, problem ) -> problem.name ++ " (" ++ showGrade cfg problem ++ ")")
         (\( _, problem ) ->
             div []
                 [ dl []
                     [ dt [] [ text "Grau:" ]
-                    , dd [] [ text (showGrade problem) ]
+                    , dd [] [ text (showGrade cfg problem) ]
                     , dt [] [ text "Descrição:" ]
                     , dd [] [ lazy (Markdown.toHtml []) problem.description ]
                     ]

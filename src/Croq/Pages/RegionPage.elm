@@ -91,16 +91,15 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    Ui.appShell cfg <|
-        div []
-            [ Ui.container
-                [ Ui.breadcrumbs (Region.breadcrumbs m)
-                , Ui.title "Mapa dos setores"
-                ]
-            , div [ class "max-w-lg mx-auto" ] [ Html.map OnMapMsg <| Map.view m.map ]
-            , Ui.container [ Tab.view tabConfig m.tab m ]
+view _ m =
+    div []
+        [ Ui.container
+            [ Ui.breadcrumbs (Region.breadcrumbs m)
+            , Ui.title "Mapa dos setores"
             ]
+        , div [ class "max-w-lg mx-auto" ] [ Html.map OnMapMsg <| Map.view m.map ]
+        , Ui.container [ Tab.view tabConfig m.tab m ]
+        ]
 
 
 viewSectors : Model -> Html Msg

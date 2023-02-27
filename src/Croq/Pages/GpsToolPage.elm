@@ -148,25 +148,24 @@ send message =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view cfg m =
-    Ui.appShell cfg <|
-        Ui.container <|
-            [ p []
-                [ button
-                    [ onClick OnRequestLocation, class "btn" ]
-                    [ text "Get location" ]
-                , text (iff (Geo.isLoaded m.state) "loaded" "unloaded")
-                ]
-            , div [ class "font-mono" ] [ text ("t: " ++ Round.round 2 m.time ++ " n: " ++ String.fromInt (List.length m.locations)) ]
-            , C.chart
-                [ CA.height 300
-                , CA.width 300
-                ]
-                [ C.xLabels [ CA.withGrid ]
-                , C.yLabels [ CA.withGrid ]
-                , C.series Tuple.first
-                    [ C.scatter Tuple.second []
-                    ]
-                    (m.locations |> List.map toTupleDegrees)
-                ]
+view _ m =
+    Ui.container <|
+        [ p []
+            [ button
+                [ onClick OnRequestLocation, class "btn" ]
+                [ text "Get location" ]
+            , text (iff (Geo.isLoaded m.state) "loaded" "unloaded")
             ]
+        , div [ class "font-mono" ] [ text ("t: " ++ Round.round 2 m.time ++ " n: " ++ String.fromInt (List.length m.locations)) ]
+        , C.chart
+            [ CA.height 300
+            , CA.width 300
+            ]
+            [ C.xLabels [ CA.withGrid ]
+            , C.yLabels [ CA.withGrid ]
+            , C.series Tuple.first
+                [ C.scatter Tuple.second []
+                ]
+                (m.locations |> List.map toTupleDegrees)
+            ]
+        ]

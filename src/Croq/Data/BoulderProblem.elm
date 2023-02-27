@@ -1,5 +1,14 @@
-module Croq.Data.BoulderProblem exposing (BoulderProblem, decode, encode, isGraded, showGrade, showWithGrade, tags)
+module Croq.Data.BoulderProblem exposing
+    ( BoulderProblem
+    , decode
+    , encode
+    , isGraded
+    , showGrade
+    , showWithGrade
+    , tags
+    )
 
+import Croq.Config as Cfg
 import Croq.Data.Climbable as Climbable exposing (Climbable)
 import Croq.Data.Id as Id
 import Croq.Data.Types exposing (..)
@@ -26,14 +35,14 @@ isGraded =
 
 {-| Show the possibly empty grade field
 -}
-showGrade : { m | grade : Maybe Bouldering.Grade } -> String
-showGrade =
-    .grade >> maybeShow Bouldering.show
+showGrade : Cfg.Model -> { m | grade : Maybe Bouldering.Grade } -> String
+showGrade cfg =
+    .grade >> maybeShow (Cfg.showBoulderingGrade cfg)
 
 
-showWithGrade : BoulderProblem -> String
-showWithGrade problem =
-    problem.name ++ " (" ++ showGrade problem ++ ")"
+showWithGrade : Cfg.Model -> BoulderProblem -> String
+showWithGrade cfg problem =
+    problem.name ++ " (" ++ showGrade cfg problem ++ ")"
 
 
 tags : BoulderProblem -> List String

@@ -17,6 +17,7 @@ import Croq.Pages.RouteSectorPage as RouteSector
 import Croq.Pages.SimplePage as Playground
 import Croq.Pages.TopoToolPage as TopoTool
 import Croq.Routes exposing (Route(..), parseUrl)
+import Croq.Ui
 import Html exposing (Html, div, text)
 import Url exposing (Url)
 
@@ -116,46 +117,53 @@ init cfg =
 
 
 view : Model -> Html Msg
-view {page, cfg} =
+view { page, cfg } =
+    let
+        shell =
+            Croq.Ui.appShell cfg OnConfigMsg
+
+        render viewf msg m =
+            shell msg (viewf cfg m)
+    in
     case page of
         HomePage m ->
-            Html.map OnHomeMsg (Home.view cfg m)
+            render Home.view OnHomeMsg m
 
         RegionPage m ->
-            Html.map OnRegionMsg (Region.view cfg m)
+            render Region.view OnRegionMsg m
 
         BoulderSectorPage m ->
-            Html.map OnBoulderSectorMsg (BoulderSector.view cfg m)
+            render BoulderSector.view OnBoulderSectorMsg m
 
         BoulderFormationPage m ->
-            Html.map OnBoulderFormationMsg (BoulderFormation.view cfg m)
+            render BoulderFormation.view OnBoulderFormationMsg m
 
         BoulderProblemPage m ->
-            Html.map OnBoulderProblemMsg (BoulderProblem.view cfg m)
+            render BoulderProblem.view OnBoulderProblemMsg m
 
         RouteSectorPage m ->
-            Html.map OnRouteSectorMsg (RouteSector.view cfg m)
+            render RouteSector.view OnRouteSectorMsg m
 
         RoutePage m ->
-            Html.map OnRouteMsg (Route.view cfg m)
+            render Route.view OnRouteMsg m
 
         ParkingPage m ->
-            Html.map OnParkingMsg (Parking.view cfg m)
+            render Parking.view OnParkingMsg m
 
         GpsToolPage m ->
-            Html.map OnGpsToolMsg (GpsTool.view cfg m)
+            render GpsTool.view OnGpsToolMsg m
 
         GradeToolPage m ->
-            Html.map OnGradeToolMsg (GradeTool.view cfg m)
+            render GradeTool.view OnGradeToolMsg m
 
         TopoToolPage m ->
-            Html.map OnTopoToolMsg (TopoTool.view cfg m)
+            render TopoTool.view OnTopoToolMsg m
 
         PlaygroundPage m ->
-            Html.map OnPlaygroundMsg (Playground.view cfg m)
+            render Playground.view OnPlaygroundMsg m
 
         ErrorPage st ->
-            div [] [ text ("ERROR :" ++ st) ]
+            render (\_ _ -> div [] [ text ("ERROR :" ++ st) ]) identity ()
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
