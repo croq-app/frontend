@@ -35,6 +35,6 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view _ _ =
-    Ui.appShell <|
+view cfg _ =
+    Ui.appShell cfg <|
         div [] [ text "Example page, Nothing to see here" ]

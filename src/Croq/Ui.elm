@@ -1,9 +1,12 @@
 module Croq.Ui exposing (..)
 
+import Croq.Api as Api
+import Croq.Config as Cfg
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
 import Croq.Data.Types exposing (..)
 import Croq.Routes as Routes
 import Croq.Ui.Color exposing (Color, colorString, fullColor)
+import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -27,31 +30,42 @@ viewOptional =
     Maybe.unwrap (text "")
 
 
-
---- COMPONENTS
-
-
-appShell : Html msg -> Html msg
-appShell content =
-    div
-        [ class "bg-base w-100"
-        , attribute "data-theme" "croq"
-        ]
+appShell : Cfg.Model -> Html msg -> Html msg
+appShell cfg content =
+    div [ class "bg-base w-100", attribute "data-theme" "croq" ]
         [ navbar
-        , main_ [] [ content ]
+        , main_
+            [ class "drawer drawer-mobile content-height overflow-y" ]
+            [ input [ id "app-drawer", type_ "checkbox", class "drawer-toggle" ] []
+            , div [ class "drawer-content" ]
+                [ content ]
+            , div [ class "drawer-side" ]
+                [ label [ for "app-drawer", class "drawer-overlay" ] []
+                , drawer cfg
+                ]
+            ]
+        ]
+
+
+drawer : Cfg.Model -> Html msg
+drawer cfg =
+    div [ class "p-4 w-64 md:w-80 lg:w-90 bg-base-100 lg:bg-base-200 text-base-content flex flex-col content-height fixed" ]
+        [ Ui.list text [ class "menu" ] [ "Grau (Via)", "Grau (Boulder)" ]
+        , div [ class "flex-1" ] []
+        , a (class "block mb-4 mx-auto w-12" :: Ui.link "http://github.com/croq-app/frontend") [ img [ alt "github.com", src (Api.static cfg "img/github.svg") ] [] ]
         ]
 
 
 navbar : Html msg
 navbar =
     let
-        icon i =
-            button [ class "btn btn-square btn-ghost" ] [ i 24 I.Inherit ]
+        icon attrs i =
+            button (class "btn btn-square btn-ghost" :: attrs) [ i 24 I.Inherit ]
     in
     div
         [ class "navbar shadow-lg bg-primary primary-content"
         ]
-        [ div [ class "flex-none" ] [ icon I.menu ]
+        [ div [ class "flex-none lg:hidden" ] [ label [ for "app-drawer", class "drawer-button btn btn-square btn-ghost" ] [ I.menu 25 I.Inherit ] ]
         , div
             [ class "flex-1" ]
             [ a
@@ -61,7 +75,7 @@ navbar =
                 ]
                 [ text "croq.app" ]
             ]
-        , div [ class "flex-none" ] [ icon I.more_vert ]
+        , div [ class "flex-none" ] [ icon [] I.search ]
         ]
 
 

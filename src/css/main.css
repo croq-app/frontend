@@ -11,7 +11,11 @@ body {
     min-height: calc(100vh - var(--navbar-height));
 }
 
+.content-height {
+    height: calc(100vh - var(--navbar-height));
+}
+
 .navbar {
-    padding-left: calc(45% - 16rem); 
-    padding-right: calc(45% - 16rem); 
+    padding-left: calc(45% - 16rem);
+    padding-right: calc(45% - 16rem);
 }

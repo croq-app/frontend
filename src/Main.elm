@@ -116,43 +116,43 @@ init cfg =
 
 
 view : Model -> Html Msg
-view model =
-    case model.page of
+view {page, cfg} =
+    case page of
         HomePage m ->
-            Html.map OnHomeMsg (Home.view model.cfg m)
+            Html.map OnHomeMsg (Home.view cfg m)
 
         RegionPage m ->
-            Html.map OnRegionMsg (Region.view model.cfg m)
+            Html.map OnRegionMsg (Region.view cfg m)
 
         BoulderSectorPage m ->
-            Html.map OnBoulderSectorMsg (BoulderSector.view model.cfg m)
+            Html.map OnBoulderSectorMsg (BoulderSector.view cfg m)
 
         BoulderFormationPage m ->
-            Html.map OnBoulderFormationMsg (BoulderFormation.view model.cfg m)
+            Html.map OnBoulderFormationMsg (BoulderFormation.view cfg m)
 
         BoulderProblemPage m ->
-            Html.map OnBoulderProblemMsg (BoulderProblem.view model.cfg m)
+            Html.map OnBoulderProblemMsg (BoulderProblem.view cfg m)
 
         RouteSectorPage m ->
-            Html.map OnRouteSectorMsg (RouteSector.view model.cfg m)
+            Html.map OnRouteSectorMsg (RouteSector.view cfg m)
 
         RoutePage m ->
-            Html.map OnRouteMsg (Route.view model.cfg m)
+            Html.map OnRouteMsg (Route.view cfg m)
 
         ParkingPage m ->
-            Html.map OnParkingMsg (Parking.view m)
+            Html.map OnParkingMsg (Parking.view cfg m)
 
         GpsToolPage m ->
-            Html.map OnGpsToolMsg (GpsTool.view m)
+            Html.map OnGpsToolMsg (GpsTool.view cfg m)
 
         GradeToolPage m ->
-            Html.map OnGradeToolMsg (GradeTool.view m)
+            Html.map OnGradeToolMsg (GradeTool.view cfg m)
 
         TopoToolPage m ->
-            Html.map OnTopoToolMsg (TopoTool.view model.cfg m)
+            Html.map OnTopoToolMsg (TopoTool.view cfg m)
 
         PlaygroundPage m ->
-            Html.map OnPlaygroundMsg (Playground.view model.cfg m)
+            Html.map OnPlaygroundMsg (Playground.view cfg m)
 
         ErrorPage st ->
             div [] [ text ("ERROR :" ++ st) ]

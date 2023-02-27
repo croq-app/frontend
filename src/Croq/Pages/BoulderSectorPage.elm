@@ -105,8 +105,8 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view _ m =
-    Ui.appShell <|
+view cfg m =
+    Ui.appShell cfg <|
         Ui.container
             [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
             , Ui.title <| sectorGet .name "Carregando setor..." m

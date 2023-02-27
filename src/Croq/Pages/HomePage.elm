@@ -34,7 +34,7 @@ subscriptions _ =
 
 view : Cfg.Model -> Model -> Html Msg
 view cfg _ =
-    Ui.appShell <|
+    Ui.appShell cfg <|
         div []
             [ div
                 [ class "hero min-h-screen with-navbar"

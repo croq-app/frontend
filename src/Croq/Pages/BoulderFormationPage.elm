@@ -71,12 +71,12 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view _ m =
+view cfg m =
     let
         info =
             List.map (\x -> ( m, x )) (Loading.unwrap [] (.elem >> .problems) m.data)
     in
-    Ui.appShell <|
+    Ui.appShell cfg <|
         Ui.container
             [ Ui.breadcrumbs (Region.boulderFormationBreadcrumbs m)
             , Ui.title "Bloco do Fax"

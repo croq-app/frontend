@@ -1,5 +1,6 @@
 module Croq.Pages.ParkingPage exposing (Model, Msg, entry, subscriptions, update, view)
 
+import Croq.Config as Cfg
 import Croq.Data.Id exposing (..)
 import Croq.Data.Types exposing (..)
 import Croq.Ui as Ui
@@ -32,7 +33,7 @@ subscriptions _ =
     Sub.none
 
 
-view : Model -> Html Msg
-view _ =
-    Ui.appShell <|
+view : Cfg.Model -> Model -> Html Msg
+view cfg _ =
+    Ui.appShell cfg <|
         div [] [ text "TODO: parking" ]

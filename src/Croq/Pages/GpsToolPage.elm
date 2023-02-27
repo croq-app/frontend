@@ -9,6 +9,7 @@ port module Croq.Pages.GpsToolPage exposing
 
 import Chart as C
 import Chart.Attributes as CA
+import Croq.Config as Cfg
 import Croq.Ui as Ui
 import Croq.Util exposing (iff)
 import Daisy.Elements as Ui
@@ -146,9 +147,9 @@ send message =
     Geo.send cmdPort message
 
 
-view : Model -> Html Msg
-view m =
-    Ui.appShell <|
+view : Cfg.Model -> Model -> Html Msg
+view cfg m =
+    Ui.appShell cfg <|
         Ui.container <|
             [ p []
                 [ button

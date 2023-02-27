@@ -57,8 +57,8 @@ subscriptions m =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view _ m =
-    (appShell << Ui.container) <|
+view cfg m =
+    (appShell cfg << Ui.container) <|
         [ Ui.title "Editor de croquis"
         , Html.map OnEditorMsg <| Editor.view config m.editor
         ]

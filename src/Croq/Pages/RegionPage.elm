@@ -91,8 +91,8 @@ subscriptions _ =
 
 
 view : Cfg.Model -> Model -> Html Msg
-view _ m =
-    Ui.appShell <|
+view cfg m =
+    Ui.appShell cfg <|
         div []
             [ Ui.container
                 [ Ui.breadcrumbs (Region.breadcrumbs m)

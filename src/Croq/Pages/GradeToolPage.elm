@@ -1,5 +1,6 @@
 module Croq.Pages.GradeToolPage exposing (Model, Msg, init, subscriptions, update, view)
 
+import Croq.Config as Cfg
 import Croq.Ui as Ui
 import Daisy.Elements as Ui
 import Grades.Bouldering as Bouldering
@@ -39,9 +40,9 @@ subscriptions _ =
     Sub.none
 
 
-view : Model -> Html Msg
-view m =
-    Ui.appShell <|
+view : Cfg.Model -> Model -> Html Msg
+view cfg m =
+    Ui.appShell cfg <|
         Ui.container
             [ Ui.title "Conversão de graus"
             , viewBoulder m.boulder
