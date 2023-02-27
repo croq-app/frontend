@@ -1,4 +1,4 @@
-module Croq.Pages.GradeToolPage exposing (Model, Msg, init, update, view)
+module Croq.Pages.GradeToolPage exposing (Model, Msg, init, subscriptions, update, view)
 
 import Croq.Ui as Ui
 import Daisy.Elements as Ui
@@ -32,6 +32,11 @@ update msg m =
 
         OnRouteInput st ->
             { m | route = st }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Model -> Html Msg

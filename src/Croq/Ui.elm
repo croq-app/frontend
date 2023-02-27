@@ -149,3 +149,16 @@ skipLastBreadcrumb lst =
 
         p :: ps ->
             p :: skipLastBreadcrumb ps
+
+
+classes : String
+classes =
+    """
+    badge badge-outline badge-sm
+
+    space-x-1
+
+    pl-4
+
+    list-disc
+    """

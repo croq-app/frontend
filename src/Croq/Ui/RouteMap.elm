@@ -7,26 +7,33 @@ import Croq.Ui.Color exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Svg.Editor as Editor
+import Svg.Editor.Config as EditorCfg
 
 
 type alias Model =
-    ()
+    Editor.Model
 
 
 type alias Msg =
-    ()
+    Editor.Msg
 
 
-view : Model -> Html msg
-view _ =
-    div [ class "bg-gradient-to-r from-cyan-500 to-blue-500 my-4 h-48" ] [ text "TODO: Topdown view of boulders in a sector" ]
+config : Editor.Config
+config =
+    EditorCfg.config []
 
 
-update : Msg -> Model -> Model
-update _ m =
-    m
+view : Model -> Html Msg
+view m =
+    Editor.view config m
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg m =
+    Editor.update config msg m
 
 
 init : Model
 init =
-    ()
+    Editor.init

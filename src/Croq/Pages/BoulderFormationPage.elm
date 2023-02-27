@@ -1,11 +1,11 @@
-module Croq.Pages.BoulderFormationPage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.BoulderFormationPage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Config as Cfg
 import Croq.Data.BoulderFormation exposing (BoulderFormation)
 import Croq.Data.BoulderProblem exposing (BoulderProblem, showGrade)
 import Croq.Data.Id exposing (..)
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
-import Croq.Data.Region as Region exposing (LocatedSector)
+import Croq.Data.Region as Region exposing (SectorCur)
 import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
 import Croq.Routes as Routes
@@ -22,13 +22,13 @@ import Markdown
 
 type alias Model =
     { id : ElemId
-    , data : LoadingHttp (Region.LocatedElem BoulderFormation)
+    , data : LoadingHttp (Region.ElemCur BoulderFormation)
     , accordion : Accordion.State
     }
 
 
 type Msg
-    = OnDataReceived (Result Http.Error LocatedSector)
+    = OnDataReceived (Result Http.Error SectorCur)
     | OnAccordionUpdate Accordion.State
 
 
@@ -42,8 +42,8 @@ entry cfg id =
     )
 
 
-update : Msg -> Cfg.Model -> Model -> ( Model, Cmd Msg )
-update msg _ m =
+update : Cfg.Model -> Msg -> Model -> ( Model, Cmd Msg )
+update _ msg m =
     let
         return m_ =
             ( m_, Cmd.none )
@@ -65,6 +65,11 @@ update msg _ m =
             return { m | accordion = state }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
 view : Cfg.Model -> Model -> Html Msg
 view _ m =
     let
@@ -73,7 +78,7 @@ view _ m =
     in
     Ui.appShell <|
         Ui.container
-            [ Ui.breadcrumbs (Region.locatedBoulderFormationBreadcrumbs m)
+            [ Ui.breadcrumbs (Region.boulderFormationBreadcrumbs m)
             , Ui.title "Bloco do Fax"
             , Carousel.view carouselConfig [ "foo", "bar", "baz" ]
             , Accordion.view accordionConfig m.accordion info

@@ -1,9 +1,9 @@
-module Croq.Pages.RoutePage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.RoutePage exposing (Model, Msg, entry, update, view, subscriptions)
 
 import Croq.Config as Cfg
 import Croq.Data.Id exposing (..)
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
-import Croq.Data.Region as Region exposing (LocatedSector)
+import Croq.Data.Region as Region exposing (SectorCur)
 import Croq.Data.Route as Route
 import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
@@ -19,12 +19,12 @@ import Markdown
 
 type alias Model =
     { id : ElemId
-    , data : LoadingHttp Region.LocatedRoute
+    , data : LoadingHttp Region.RouteCur
     }
 
 
 type Msg
-    = OnDataReceived (Result Http.Error LocatedSector)
+    = OnDataReceived (Result Http.Error SectorCur)
 
 
 entry : Cfg.Model -> ElemId -> ( Model, Cmd Msg )
@@ -51,13 +51,18 @@ update msg m =
             }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
 view : Cfg.Model -> Model -> Html Msg
 view _ m =
     Ui.appShell <|
         Ui.viewLoading m.data <|
             \{ elem } ->
                 Ui.container
-                    [ Ui.breadcrumbs (Region.locatedRouteBreadcrumbs m)
+                    [ Ui.breadcrumbs (Region.routeBreadcrumbs m)
                     , Ui.title elem.name
                     , Ui.tags (Route.tags elem)
                     , Carousel.view carouselConfig [ "??", "??" ]

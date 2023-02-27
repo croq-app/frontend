@@ -1,10 +1,9 @@
-module Croq.Pages.SimplePage exposing (Model, Msg, init, update, view)
+module Croq.Pages.SimplePage exposing (Model, Msg, init, update, view, subscriptions)
 
 {-| Example bare bones page
 -}
 
 import Croq.Config as Cfg
-import Croq.Ui as Ui
 import Croq.Ui as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -28,6 +27,11 @@ update msg _ m =
     case msg of
         NoOp ->
             ( m, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Cfg.Model -> Model -> Html Msg

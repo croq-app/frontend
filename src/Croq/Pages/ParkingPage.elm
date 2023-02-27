@@ -1,4 +1,4 @@
-module Croq.Pages.ParkingPage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.ParkingPage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Data.Id exposing (..)
 import Croq.Data.Types exposing (..)
@@ -25,6 +25,11 @@ update msg m =
     case msg of
         NoOp ->
             ( m, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Model -> Html Msg

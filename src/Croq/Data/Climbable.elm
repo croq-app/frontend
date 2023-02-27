@@ -1,4 +1,4 @@
-module Croq.Data.Climbable exposing (Climbable, decode, encode, tags)
+module Croq.Data.Climbable exposing (Climbable, decode, encode, normalize, tags)
 
 import Croq.Data.ClimbingTechnique as ClimbingTechnique exposing (ClimbingTechnique)
 import Croq.Data.Direction as Direction exposing (Direction)
@@ -15,8 +15,8 @@ import Maybe.Extra as Maybe
 
 type alias Climbable id grade extra =
     { id : id
-    , name : Name 
-    -- , shortName: Name
+    , name : Name
+    , shortName : Name
     , description : Text
     , grade : Maybe grade
     , rating : Maybe Rating
@@ -29,10 +29,19 @@ type alias Climbable id grade extra =
     , techniques : List ClimbingTechnique
     , warnings : List Warning
     , videos : List Video
-    -- , images: List Image
+    , images : List Image
     , betas : List Beta
     , extra : extra
     }
+
+
+normalize : Climbable id grade extra -> Climbable id grade extra
+normalize obj =
+    if obj.shortName == "" then
+        { obj | shortName = obj.name }
+
+    else
+        obj
 
 
 tags : Climbable id grade extra -> List String
@@ -59,6 +68,7 @@ decode id grade =
     D.succeed Climbable
         |> D.required "id" id
         |> D.required "name" D.string
+        |> D.optional "short_name" D.string ""
         |> D.optional "description" D.string ""
         |> nullable "grade" grade
         |> nullable "rating" Rating.decoder
@@ -71,7 +81,9 @@ decode id grade =
         |> optList "techniques" ClimbingTechnique.decoder
         |> optList "warnings" Warning.decoder
         |> optList "videos" D.string
+        |> optList "images" D.string
         |> optList "betas" D.string
+        |> D.map (\f a -> f a |> normalize)
 
 
 encode : (id -> E.Value) -> (grade -> E.Value) -> List ( String, E.Value ) -> Climbable id grade extra -> E.Value

@@ -1,11 +1,11 @@
-module Croq.Pages.BoulderSectorPage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.BoulderSectorPage exposing (Model, Msg, entry, update, view, subscriptions)
 
 import Croq.Config as Cfg
 import Croq.Data.BoulderFormation as BoulderFormation exposing (BoulderFormation)
 import Croq.Data.BoulderProblem exposing (showWithGrade)
 import Croq.Data.Id exposing (..)
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
-import Croq.Data.Region as Region exposing (LocatedSector)
+import Croq.Data.Region as Region exposing (SectorCur)
 import Croq.Data.Sector as Sector
 import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest, sectorGet, viewAccess)
@@ -31,7 +31,7 @@ import Table exposing (defaultCustomizations)
 
 type alias Model =
     { id : SectorId
-    , data : LoadingHttp LocatedSector
+    , data : LoadingHttp SectorCur
     , selectedFormation : Maybe ElemId
     , accordion : Accordion.State
     , tab : Tab.Model
@@ -42,7 +42,7 @@ type alias Model =
 
 
 type Msg
-    = OnDataReceived (Result Http.Error LocatedSector)
+    = OnDataReceived (Result Http.Error SectorCur)
     | OnTabMsg Tab.Msg
     | OnMapMsg Map.Msg
     | OnHistogramMsg Histogram.Msg
@@ -66,24 +66,28 @@ entry cfg id =
     )
 
 
-update : Msg -> Cfg.Model -> Model -> ( Model, Cmd Msg )
-update msg _ m =
+update : Cfg.Model -> Msg -> Model -> ( Model, Cmd Msg )
+update _ msg_ m =
     let
         return model =
             ( model, Cmd.none )
     in
-    case msg of
+    case msg_ of
         OnDataReceived data ->
             return { m | data = Loading.fromResult data }
 
-        OnTabMsg msg_ ->
-            return { m | tab = Tab.update msg_ m.tab }
+        OnTabMsg msg ->
+            return { m | tab = Tab.update msg m.tab }
 
-        OnMapMsg msg_ ->
-            return { m | map = Map.update msg_ m.map }
+        OnMapMsg msg ->
+            let
+                ( map, cmd ) =
+                    Map.update msg m.map
+            in
+            ( { m | map = map }, Cmd.map OnMapMsg cmd )
 
-        OnHistogramMsg msg_ ->
-            return { m | histogram = Histogram.update msg_ m.histogram }
+        OnHistogramMsg msg ->
+            return { m | histogram = Histogram.update msg m.histogram }
 
         OnTableUpdate state ->
             return { m | table = state }
@@ -95,11 +99,16 @@ update msg _ m =
             return { m | accordion = state }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
 view : Cfg.Model -> Model -> Html Msg
 view _ m =
     Ui.appShell <|
         Ui.container
-            [ Ui.breadcrumbs (Region.locatedSectorBreadcrumbs m)
+            [ Ui.breadcrumbs (Region.sectorBreadcrumbs m)
             , Ui.title <| sectorGet .name "Carregando setor..." m
             , Ui.tags <| sectorGet (.tags >> List.map Sector.renderTag) [] m
             , Tab.view tabConfig m.tab m

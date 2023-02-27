@@ -1,30 +1,29 @@
-module Croq.Pages.BoulderProblemPage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.BoulderProblemPage exposing (Model, Msg, entry, update, view, subscriptions)
 
 import Croq.Config as Cfg
 import Croq.Data.BoulderProblem as BoulderProblem
 import Croq.Data.Id exposing (..)
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
-import Croq.Data.Region as Region exposing (LocatedSector)
+import Croq.Data.Region as Region exposing (SectorCur)
 import Croq.Data.Types exposing (..)
 import Croq.Pages.SectorPageCommon exposing (httpDataRequest)
 import Croq.Ui as Ui
 import Croq.Ui.Carousel as Carousel
+import Croq.Ui.Climbable as Climbable
 import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Lazy exposing (lazy)
 import Http
-import Markdown
 
 
 type alias Model =
     { id : ProblemId
-    , data : LoadingHttp Region.LocatedBoulderProblem
+    , data : LoadingHttp Region.BoulderProblemCur
     }
 
 
 type Msg
-    = OnDataReceived (Result Http.Error LocatedSector)
+    = OnDataReceived (Result Http.Error SectorCur)
 
 
 entry : Cfg.Model -> ProblemId -> ( Model, Cmd Msg )
@@ -52,23 +51,22 @@ update msg m =
             }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
 view : Cfg.Model -> Model -> Html Msg
 view _ m =
     Ui.appShell <|
         Ui.viewLoading m.data <|
             \{ problem, elem } ->
                 Ui.container
-                    [ Ui.breadcrumbs (Region.locatedProblemBreadcrumbs m)
+                    [ Ui.breadcrumbs (Region.problemBreadcrumbs m)
                     , Ui.title problem.name
                     , Ui.tags (BoulderProblem.tags problem)
                     , Carousel.view carouselConfig [ "??", "??" ]
-                    , Ui.sections []
-                        [ ( "Bloco", [ text elem.name ] )
-                        , ( "Descrição/Saída", [ lazy (Markdown.toHtml []) problem.description ] )
-                        , ( "Vídeos"
-                          , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) problem.videos ) ]
-                          )
-                        ]
+                    , Ui.sections [] (( "Bloco", [ text elem.name ] ) :: Climbable.sections problem)
                     ]
 
 

@@ -63,6 +63,10 @@ type alias HtmlElem msg =
     List (Attribute msg) -> List (Html msg) -> Html msg
 
 
+type alias Image =
+    String
+
+
 {-| Conditionally return ok or bad depending if x in present in xs.
 -}
 selectElem : a -> List a -> b -> b -> b

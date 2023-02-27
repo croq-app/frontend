@@ -1,8 +1,16 @@
-port module Croq.Pages.GpsToolPage exposing (..)
+port module Croq.Pages.GpsToolPage exposing
+    ( Model
+    , Msg
+    , entry
+    , subscriptions
+    , update
+    , view
+    )
 
 import Chart as C
 import Chart.Attributes as CA
 import Croq.Ui as Ui
+import Croq.Util exposing (iff)
 import Daisy.Elements as Ui
 import Dict exposing (Dict)
 import Html exposing (..)
@@ -39,14 +47,6 @@ port cmdPort : Value -> Cmd msg
 
 
 port subPort : (Value -> msg) -> Sub msg
-
-
-subscriptions : Sub Msg
-subscriptions =
-    Sub.batch
-        [ subPort OnDataReceived
-        , Time.every 10 (Time.posixToMillis >> toFloat >> (*) 0.001 >> OnTick)
-        ]
 
 
 entry : ( Model, Cmd.Cmd Msg )
@@ -133,6 +133,14 @@ update msg m =
                     { m | time = t - m.start }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.batch
+        [ subPort OnDataReceived
+        , Time.every 10 (Time.posixToMillis >> toFloat >> (*) 0.001 >> OnTick)
+        ]
+
+
 send : Geo.Message -> Cmd Msg
 send message =
     Geo.send cmdPort message
@@ -161,31 +169,3 @@ view m =
                     (m.locations |> List.map toTupleDegrees)
                 ]
             ]
-
-
-svgPath : List ( Float, Float ) -> String
-svgPath lst =
-    let
-        pt s ( x, y ) =
-            s ++ String.fromFloat x ++ "," ++ String.fromFloat y
-    in
-    case lst of
-        [] ->
-            "M 0.0,0.0"
-
-        x :: rest ->
-            pt "M" x
-                ++ " "
-                ++ (rest
-                        |> List.map (pt "L")
-                        |> String.join " "
-                   )
-
-
-iff : Bool -> c -> c -> c
-iff a b c =
-    if a then
-        b
-
-    else
-        c

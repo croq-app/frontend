@@ -4,7 +4,7 @@ import Croq.Api as Api
 import Croq.Config as Cfg
 import Croq.Data.Id exposing (..)
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
-import Croq.Data.Region as Region exposing (LocatedSector)
+import Croq.Data.Region as Region exposing (SectorCur)
 import Croq.Data.Types exposing (..)
 import Croq.Ui as Ui
 import Html exposing (..)
@@ -13,7 +13,7 @@ import Html.Events exposing (..)
 import Http
 
 
-viewAccess : { m | data : LoadingHttp LocatedSector } -> Html msg
+viewAccess : { m | data : LoadingHttp SectorCur } -> Html msg
 viewAccess m =
     Ui.viewLoading m.data <|
         \{ sector } ->
@@ -31,7 +31,7 @@ dataGet project attr default m =
     Loading.unwrap default (project >> attr) m.data
 
 
-httpDataRequest : (Result Http.Error LocatedSector -> msg) -> Cfg.Model -> SectorId -> Cmd msg
+httpDataRequest : (Result Http.Error SectorCur -> msg) -> Cfg.Model -> SectorId -> Cmd msg
 httpDataRequest msg cfg id =
     Http.get
         { url = Api.sectorUrl cfg id

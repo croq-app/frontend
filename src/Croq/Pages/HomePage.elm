@@ -1,12 +1,12 @@
-module Croq.Pages.HomePage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.HomePage exposing (Model, Msg, entry, subscriptions, update, view)
 
+import Croq.Api exposing (static)
 import Croq.Config as Cfg
 import Croq.Data.Id exposing (..)
 import Croq.Routes as Routes
 import Croq.Ui as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Croq.Api exposing (static)
 
 
 type Model
@@ -25,6 +25,11 @@ entry _ =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update _ m =
     ( m, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Cfg.Model -> Model -> Html Msg

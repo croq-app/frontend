@@ -54,7 +54,7 @@ type Msg
     | OnBoulderFormationMsg BoulderFormation.Msg
     | OnBoulderProblemMsg BoulderProblem.Msg
     | OnRouteSectorMsg RouteSector.Msg
-    | OnRouteDetailMsg Route.Msg
+    | OnRouteMsg Route.Msg
     | OnParkingMsg Parking.Msg
     | OnGpsToolMsg GpsTool.Msg
     | OnGradeToolMsg GradeTool.Msg
@@ -89,7 +89,7 @@ pageFromRoute r cfg =
             page RouteSectorPage OnRouteSectorMsg (RouteSector.entry cfg req)
 
         Route req ->
-            page RoutePage OnRouteDetailMsg (Route.entry cfg req)
+            page RoutePage OnRouteMsg (Route.entry cfg req)
 
         Parking req ->
             page ParkingPage OnParkingMsg (Parking.entry req)
@@ -137,7 +137,7 @@ view model =
             Html.map OnRouteSectorMsg (RouteSector.view model.cfg m)
 
         RoutePage m ->
-            Html.map OnRouteDetailMsg (Route.view model.cfg m)
+            Html.map OnRouteMsg (Route.view model.cfg m)
 
         ParkingPage m ->
             Html.map OnParkingMsg (Parking.view m)
@@ -186,22 +186,22 @@ update msg_ m_ =
             page HomePage OnHomeMsg (Home.update msg m)
 
         ( OnRegionMsg msg, RegionPage m ) ->
-            page RegionPage OnRegionMsg ( Region.update msg m, Cmd.none )
+            page RegionPage OnRegionMsg (Region.update msg m)
 
         ( OnBoulderSectorMsg msg, BoulderSectorPage m ) ->
-            page BoulderSectorPage OnBoulderSectorMsg (BoulderSector.update msg cfg m)
+            page BoulderSectorPage OnBoulderSectorMsg (BoulderSector.update cfg msg m)
 
         ( OnBoulderFormationMsg msg, BoulderFormationPage m ) ->
-            page BoulderFormationPage OnBoulderFormationMsg (BoulderFormation.update msg cfg m)
+            page BoulderFormationPage OnBoulderFormationMsg (BoulderFormation.update cfg msg m)
 
         ( OnBoulderProblemMsg msg, BoulderProblemPage m ) ->
             page BoulderProblemPage OnBoulderProblemMsg ( BoulderProblem.update msg m, Cmd.none )
 
         ( OnRouteSectorMsg msg, RouteSectorPage m ) ->
-            page RouteSectorPage OnRouteSectorMsg (RouteSector.update msg cfg m)
+            page RouteSectorPage OnRouteSectorMsg (RouteSector.update cfg msg m)
 
-        ( OnRouteDetailMsg msg, RoutePage m ) ->
-            page RoutePage OnRouteDetailMsg ( Route.update msg m, Cmd.none )
+        ( OnRouteMsg msg, RoutePage m ) ->
+            page RoutePage OnRouteMsg ( Route.update msg m, Cmd.none )
 
         ( OnGpsToolMsg msg, GpsToolPage m ) ->
             page GpsToolPage OnGpsToolMsg (GpsTool.update msg m)
@@ -231,13 +231,44 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ case model.page of
+            HomePage m ->
+                Sub.map OnHomeMsg (Home.subscriptions m)
+
+            RegionPage m ->
+                Sub.map OnRegionMsg (Region.subscriptions m)
+
+            BoulderSectorPage m ->
+                Sub.map OnBoulderSectorMsg (BoulderSector.subscriptions m)
+
+            BoulderFormationPage m ->
+                Sub.map OnBoulderFormationMsg (BoulderFormation.subscriptions m)
+
+            BoulderProblemPage m ->
+                Sub.map OnBoulderProblemMsg (BoulderProblem.subscriptions m)
+
+            RouteSectorPage m ->
+                Sub.map OnRouteSectorMsg (RouteSector.subscriptions m)
+
+            RoutePage m ->
+                Sub.map OnRouteMsg (Route.subscriptions m)
+
+            ParkingPage m ->
+                Sub.map OnParkingMsg (Parking.subscriptions m)
+
+            GpsToolPage m ->
+                Sub.map OnGpsToolMsg (GpsTool.subscriptions m)
+
+            GradeToolPage m ->
+                Sub.map OnGradeToolMsg (GradeTool.subscriptions m)
+
             TopoToolPage m ->
                 Sub.map OnTopoToolMsg (TopoTool.subscriptions m)
 
+            PlaygroundPage m ->
+                Sub.map OnPlaygroundMsg (Playground.subscriptions m)
+
             _ ->
                 Sub.none
-
-        -- , Sub.map OnGpsToolMsg GpsTool.subscriptions
         ]
 
 

@@ -1,4 +1,4 @@
-module Croq.Data.Region exposing (LocatedBoulderFormation, LocatedBoulderProblem, LocatedElem, LocatedRoute, LocatedSector, Region, breadcrumbs, decoder, encoder, getBoulderFormation, getBoulderProblem, getRoute, getSector, locatedBoulderFormationBreadcrumbs, locatedProblemBreadcrumbs, locatedRouteBreadcrumbs, locatedSectorBreadcrumbs, locatedSectorDecoder, locatedSectorEncoder, sectors)
+module Croq.Data.Region exposing (BoulderFormationCur, BoulderProblemCur, ElemCur, RouteCur, SectorCur, Region, breadcrumbs, decoder, encoder, getBoulderFormation, getBoulderProblem, getRoute, getSector, boulderFormationBreadcrumbs, problemBreadcrumbs, routeBreadcrumbs, sectorBreadcrumbs, locatedSectorDecoder, locatedSectorEncoder, sectors)
 
 import Croq.Data.Attraction as Attraction exposing (Attraction)
 import Croq.Data.BoulderFormation exposing (BoulderFormation)
@@ -8,6 +8,7 @@ import Croq.Data.Loading as Loading exposing (LoadingHttp)
 import Croq.Data.Route exposing (Route)
 import Croq.Data.Sector as Sector exposing (Sector)
 import Croq.Data.Types exposing (..)
+import Croq.Data.Util exposing (normalizeShortName)
 import Croq.Routes as Routes
 import Json.Decode as D
 import Json.Decode.Pipeline as D
@@ -18,6 +19,7 @@ import LatLng as LatLng exposing (LatLng)
 type alias Region =
     { id : Id.RegionId
     , name : Name
+    , shortName : Name
     , country : Country
     , location : LatLng
     , description : Text
@@ -27,34 +29,34 @@ type alias Region =
     }
 
 
-type alias LocatedSector =
+type alias SectorCur =
     { region : Region
     , sector : Sector
     }
 
 
-type alias LocatedRoute =
+type alias RouteCur =
     { region : Region
     , sector : Sector
     , elem : Route
     }
 
 
-type alias LocatedBoulderFormation =
+type alias BoulderFormationCur =
     { region : Region
     , sector : Sector
     , elem : BoulderFormation
     }
 
 
-type alias LocatedElem elem =
+type alias ElemCur elem =
     { region : Region
     , sector : Sector
     , elem : elem
     }
 
 
-type alias LocatedBoulderProblem =
+type alias BoulderProblemCur =
     { region : Region
     , sector : Sector
     , elem : BoulderFormation
@@ -62,41 +64,41 @@ type alias LocatedBoulderProblem =
     }
 
 
-getBoulderProblem : Id.ProblemId -> LocatedBoulderFormation -> Maybe LocatedBoulderProblem
+getBoulderProblem : Id.ProblemId -> BoulderFormationCur -> Maybe BoulderProblemCur
 getBoulderProblem id { region, sector, elem } =
     Id.elemFromId id elem.problems
-        |> Maybe.map (LocatedBoulderProblem region sector elem)
+        |> Maybe.map (BoulderProblemCur region sector elem)
 
 
-getRoute : Id.ElemId -> LocatedSector -> Maybe LocatedRoute
+getRoute : Id.ElemId -> SectorCur -> Maybe RouteCur
 getRoute id { region, sector } =
     Id.elemFromId id sector.routes
-        |> Maybe.map (LocatedRoute region sector)
+        |> Maybe.map (RouteCur region sector)
 
 
-getBoulderFormation : Id.ElemId -> LocatedSector -> Maybe LocatedBoulderFormation
+getBoulderFormation : Id.ElemId -> SectorCur -> Maybe BoulderFormationCur
 getBoulderFormation id { region, sector } =
     Id.elemFromId id sector.boulders
-        |> Maybe.map (LocatedBoulderFormation region sector)
+        |> Maybe.map (BoulderFormationCur region sector)
 
 
-getSector : Id.SectorId -> Region -> Maybe LocatedSector
+getSector : Id.SectorId -> Region -> Maybe SectorCur
 getSector id region =
     Id.elemFromId id region.sectors
-        |> Maybe.map (LocatedSector region)
+        |> Maybe.map (SectorCur region)
 
 
-toElem : LocatedBoulderProblem -> LocatedElem BoulderFormation
+toElem : BoulderProblemCur -> ElemCur BoulderFormation
 toElem { region, sector, elem } =
-    LocatedElem region sector elem
+    ElemCur region sector elem
 
 
-toSector : LocatedElem a -> LocatedSector
+toSector : ElemCur a -> SectorCur
 toSector { region, sector } =
-    LocatedSector region sector
+    SectorCur region sector
 
 
-toRegion : LocatedSector -> Region
+toRegion : SectorCur -> Region
 toRegion { region } =
     region
 
@@ -109,52 +111,52 @@ breadcrumbs m =
                 m.id.parent.slug |> String.toUpper
         in
         [ ( Routes.countryUrl m.id.parent, countryCode )
-        , ( Routes.regionUrl m.id, Loading.unwrap m.id.slug .name m.data )
+        , ( Routes.regionUrl m.id, Loading.unwrap m.id.slug .shortName m.data )
         ]
 
     else
-        [ ( Routes.regionUrl m.id, Loading.unwrap m.id.slug .name m.data ) ]
+        [ ( Routes.regionUrl m.id, Loading.unwrap m.id.slug .shortName m.data ) ]
 
 
-locatedSectorBreadcrumbs : { m | id : Id.SectorId, data : LoadingHttp LocatedSector } -> List ( Url, Name )
-locatedSectorBreadcrumbs m =
+sectorBreadcrumbs : { m | id : Id.SectorId, data : LoadingHttp SectorCur } -> List ( Url, Name )
+sectorBreadcrumbs m =
     breadcrumbs { id = m.id.parent, data = Loading.map toRegion m.data }
         ++ [ ( Routes.boulderSectorUrl m.id
-             , Loading.unwrap m.id.slug (.sector >> .name) m.data
+             , Loading.unwrap m.id.slug (.sector >> .shortName) m.data
              )
            ]
 
 
-locatedBoulderFormationBreadcrumbs : { m | id : Id.ElemId, data : LoadingHttp LocatedBoulderFormation } -> List ( Url, Name )
-locatedBoulderFormationBreadcrumbs m =
-    locatedSectorBreadcrumbs { id = m.id.parent, data = Loading.map toSector m.data }
+boulderFormationBreadcrumbs : { m | id : Id.ElemId, data : LoadingHttp BoulderFormationCur } -> List ( Url, Name )
+boulderFormationBreadcrumbs m =
+    sectorBreadcrumbs { id = m.id.parent, data = Loading.map toSector m.data }
         ++ [ ( Routes.boulderFormationUrl m.id
-             , Loading.unwrap m.id.slug (.elem >> .name) m.data
+             , Loading.unwrap m.id.slug (.elem >> .shortName) m.data
              )
            ]
 
 
-locatedRouteBreadcrumbs : { m | id : Id.ElemId, data : LoadingHttp LocatedRoute } -> List ( Url, Name )
-locatedRouteBreadcrumbs m =
-    locatedSectorBreadcrumbs { id = m.id.parent, data = Loading.map toSector m.data }
+routeBreadcrumbs : { m | id : Id.ElemId, data : LoadingHttp RouteCur } -> List ( Url, Name )
+routeBreadcrumbs m =
+    sectorBreadcrumbs { id = m.id.parent, data = Loading.map toSector m.data }
         ++ [ ( Routes.routeUrl m.id
-             , Loading.unwrap m.id.slug (.elem >> .name) m.data
+             , Loading.unwrap m.id.slug (.elem >> .shortName) m.data
              )
            ]
 
 
-locatedProblemBreadcrumbs : { m | id : Id.ProblemId, data : LoadingHttp LocatedBoulderProblem } -> List ( Url, Name )
-locatedProblemBreadcrumbs m =
-    locatedBoulderFormationBreadcrumbs { id = m.id.parent, data = Loading.map toElem m.data }
+problemBreadcrumbs : { m | id : Id.ProblemId, data : LoadingHttp BoulderProblemCur } -> List ( Url, Name )
+problemBreadcrumbs m =
+    boulderFormationBreadcrumbs { id = m.id.parent, data = Loading.map toElem m.data }
         ++ [ ( Routes.boulderProblemUrl m.id
-             , Loading.unwrap m.id.slug (.problem >> .name) m.data
+             , Loading.unwrap m.id.slug (.problem >> .shortName) m.data
              )
            ]
 
 
-sectors : Region -> List LocatedSector
+sectors : Region -> List SectorCur
 sectors region =
-    region.sectors |> List.map (LocatedSector region)
+    region.sectors |> List.map (SectorCur region)
 
 
 decoder : D.Decoder Region
@@ -162,17 +164,19 @@ decoder =
     D.succeed Region
         |> D.required "id" Id.decodeRegionId
         |> D.required "name" D.string
+        |> D.optional "short_name" D.string ""
         |> D.required "country" D.string
         |> D.required "location" LatLng.decoder
         |> D.optional "description" D.string ""
         |> D.optional "how_to_access" D.string ""
         |> D.optional "attractions" (D.list Attraction.decoder) []
         |> D.optional "sectors" (D.list Sector.decoder) []
+        |> D.map normalizeShortName
 
 
-locatedSectorDecoder : D.Decoder LocatedSector
+locatedSectorDecoder : D.Decoder SectorCur
 locatedSectorDecoder =
-    D.succeed LocatedSector
+    D.succeed SectorCur
         |> D.required "region" decoder
         |> D.required "sector" Sector.decoder
 
@@ -182,6 +186,7 @@ encoder region =
     E.object
         [ ( "id", Id.encodeRegionId region.id )
         , ( "name", E.string region.name )
+        , ( "short_name", E.string region.shortName )
         , ( "country", E.string region.country )
         , ( "location", LatLng.encoder region.location )
         , ( "description", E.string region.description )
@@ -191,7 +196,7 @@ encoder region =
         ]
 
 
-locatedSectorEncoder : LocatedSector -> E.Value
+locatedSectorEncoder : SectorCur -> E.Value
 locatedSectorEncoder loc =
     E.object
         [ ( "region", encoder loc.region )

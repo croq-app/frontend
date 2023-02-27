@@ -1,4 +1,4 @@
-module Croq.Pages.RegionPage exposing (Model, Msg, entry, update, view)
+module Croq.Pages.RegionPage exposing (Model, Msg, entry, subscriptions, update, view)
 
 import Croq.Api as Api
 import Croq.Config as Cfg
@@ -55,26 +55,39 @@ entry cfg id =
     ( m, httpDataRequest cfg id )
 
 
-update : Msg -> Model -> Model
-update msg m =
-    case msg of
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg_ m =
+    let
+        return m_ =
+            ( m_, Cmd.none )
+    in
+    case msg_ of
         OnDataReceived data ->
-            { m | data = Loading.fromResult data }
+            return { m | data = Loading.fromResult data }
 
-        OnTabMsg msg_ ->
-            { m | tab = Tab.update msg_ m.tab }
+        OnTabMsg msg ->
+            return { m | tab = Tab.update msg m.tab }
 
-        OnMapMsg msg_ ->
-            { m | map = Map.update msg_ m.map }
+        OnMapMsg msg ->
+            let
+                ( map, cmd ) =
+                    Map.update msg m.map
+            in
+            ( { m | map = map }, Cmd.map OnMapMsg cmd )
 
         OnChangeSelectedSector i ->
-            { m | selectedSector = i }
+            return { m | selectedSector = i }
 
         OnChangeSelectedAttraction i ->
-            { m | selectedAttraction = i }
+            return { m | selectedAttraction = i }
 
         OnShowAttraction i ->
-            { m | showAttraction = i >= 0, selectedAttraction = i }
+            return { m | showAttraction = i >= 0, selectedAttraction = i }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Cfg.Model -> Model -> Html Msg
@@ -85,7 +98,7 @@ view _ m =
                 [ Ui.breadcrumbs (Region.breadcrumbs m)
                 , Ui.title "Mapa dos setores"
                 ]
-            , div [ class "max-w-lg mx-auto" ] [ Map.view m.map ]
+            , div [ class "max-w-lg mx-auto" ] [ Html.map OnMapMsg <| Map.view m.map ]
             , Ui.container [ Tab.view tabConfig m.tab m ]
             ]
 

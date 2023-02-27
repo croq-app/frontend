@@ -2,9 +2,9 @@
     "region": {
         "id": "br/belchi",
         "name": "Pedra do Belchior",
+        "short_name": "Belchi",
         "country": "Brasil",
         "description": "Pedra do Belchior é um sítio em São Gabriel, blah blah",
-        "short_name": "Belchior",
         "location": "-15.7778085192, -48.7921407225"
     },
     "sector": {
