@@ -18,7 +18,7 @@ viewAccess _ m =
     Ui.viewLoading m.data <|
         \{ sector } ->
             div []
-                [ p [] [ text sector.howToAccess ] ]
+                [ p [] [ viewOptionalRichText "Sem descrição 😥" sector.howToAccess ] ]
 
 
 sectorGet : (b -> c) -> c -> { d | data : LoadingHttp { a | sector : b } } -> c

@@ -1,6 +1,6 @@
 module Croq.Data.ClimbingTechnique exposing (ClimbingTechnique, decoder, encoder, parse, toString)
 
-import Croq.Data.Util exposing (parsingDecoder)
+import Croq.Data.Util exposing (parsingDecoder, withParseError)
 import Json.Decode as D
 import Json.Encode as E
 
@@ -20,7 +20,7 @@ encoder =
 
 decoder : D.Decoder ClimbingTechnique
 decoder =
-    parsingDecoder "invalid climbing style" parse
+    parsingDecoder (withParseError "invalid climbing style" parse)
 
 
 toString : ClimbingTechnique -> String

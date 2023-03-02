@@ -143,7 +143,7 @@ viewInfo _ m =
                         |> List.map (\( x, y ) -> ( Maybe.map Climbing.show x |> Maybe.withDefault "∅", toFloat y ))
             in
             Ui.sections []
-                [ ( "Descrição", [ lazy (Markdown.toHtml []) sector.description ] )
+                [ ( "Descrição", [ viewOptionalRichText "Sem descrição 😥" sector.description ] )
                 , ( "Distribuição de graus", [ Html.map OnHistogramMsg (Histogram.view m.histogram histData) ] )
                 , ( "Lista de problemas", [ Table.view tableConfig m.table sector.routes ] )
                 ]

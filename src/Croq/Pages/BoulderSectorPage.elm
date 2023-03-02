@@ -21,10 +21,8 @@ import Grades.Bouldering as Bouldering
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Html.Lazy exposing (lazy)
 import Http
 import List.Extra as List
-import Markdown
 import Maybe.Extra as Maybe
 import Table exposing (defaultCustomizations)
 
@@ -143,7 +141,7 @@ viewInfo cfg m =
                         |> List.map (\( x, y ) -> ( Maybe.map (Cfg.showBoulderingGrade cfg) x |> Maybe.withDefault "∅", toFloat y ))
             in
             Ui.sections []
-                [ ( "Descrição", [ lazy (Markdown.toHtml []) sector.description ] )
+                [ ( "Descrição", [ viewOptionalRichText "Sem descrição 😥" sector.description ] )
                 , ( "Distribuição de graus", [ Html.map OnHistogramMsg (Histogram.view m.histogram histData) ] )
                 , ( "Lista de problemas", [ Table.view tableConfig m.table problems ] )
                 ]

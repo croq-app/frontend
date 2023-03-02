@@ -10,7 +10,7 @@
     "sector": {
         "id": "br/cocal/casa-da-cobra",
         "name": "Casa da cobra",
-        "type": "boulder",
+        "kind": "boulder",
         "location": "-15.7778085192, -48.7921407225",
         "description": "Clássico de cocal",
         "how_to_access": "Vá para o estacionamento tal e tal",

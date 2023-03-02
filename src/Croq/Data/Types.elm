@@ -1,6 +1,8 @@
 module Croq.Data.Types exposing (..)
 
 import Html exposing (Attribute, Html)
+import Html.Extra as Html
+import Markdown
 
 
 type alias Id =
@@ -17,6 +19,14 @@ type alias Person =
 
 type alias Text =
     String
+
+
+{-| Rich text string, in Markdown
+-}
+type alias RichText =
+    { src : String
+    , parsed : Html.Html Never
+    }
 
 
 type alias Beta =
@@ -91,3 +101,23 @@ uniqueSqr elems =
 
         x :: xs ->
             x :: List.filter ((/=) x) xs
+
+
+richText : String -> RichText
+richText src =
+    { src = src, parsed = Markdown.toHtml [] src }
+
+
+viewRichText : RichText -> Html msg
+viewRichText { parsed } =
+    Html.static parsed
+
+
+viewOptionalRichText : Text -> Maybe RichText -> Html msg
+viewOptionalRichText error rich =
+    case rich of
+        Just txt ->
+            viewRichText txt
+
+        Nothing ->
+            Markdown.toHtml [] error

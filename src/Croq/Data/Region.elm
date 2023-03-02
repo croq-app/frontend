@@ -1,8 +1,10 @@
-module Croq.Data.Region exposing (BoulderFormationCur, BoulderProblemCur, ElemCur, RouteCur, SectorCur, Region, breadcrumbs, decoder, encoder, getBoulderFormation, getBoulderProblem, getRoute, getSector, boulderFormationBreadcrumbs, problemBreadcrumbs, routeBreadcrumbs, sectorBreadcrumbs, locatedSectorDecoder, locatedSectorEncoder, sectors)
+module Croq.Data.Region exposing (BoulderFormationCur, BoulderProblemCur, ElemCur, Region, RouteCur, SectorCur, boulderFormationBreadcrumbs, breadcrumbs, decoder, encoder, getBoulderFormation, getBoulderProblem, getRoute, getSector, locatedSectorDecoder, locatedSectorEncoder, problemBreadcrumbs, routeBreadcrumbs, sectorBreadcrumbs, sectors)
 
 import Croq.Data.Attraction as Attraction exposing (Attraction)
 import Croq.Data.BoulderFormation exposing (BoulderFormation)
 import Croq.Data.BoulderProblem exposing (BoulderProblem)
+import Croq.Data.Decode as D
+import Croq.Data.Encode as E
 import Croq.Data.Id as Id
 import Croq.Data.Loading as Loading exposing (LoadingHttp)
 import Croq.Data.Route exposing (Route)
@@ -22,8 +24,8 @@ type alias Region =
     , shortName : Name
     , country : Country
     , location : LatLng
-    , description : Text
-    , howToAccess : Text
+    , description : Maybe RichText
+    , howToAccess : Maybe RichText
     , attractions : List Attraction
     , sectors : List Sector
     }
@@ -167,8 +169,8 @@ decoder =
         |> D.optional "short_name" D.string ""
         |> D.required "country" D.string
         |> D.required "location" LatLng.decoder
-        |> D.optional "description" D.string ""
-        |> D.optional "how_to_access" D.string ""
+        |> D.nullableField "description" D.richText
+        |> D.nullableField "how_to_access" D.richText
         |> D.optional "attractions" (D.list Attraction.decoder) []
         |> D.optional "sectors" (D.list Sector.decoder) []
         |> D.map normalizeShortName
@@ -189,8 +191,8 @@ encoder region =
         , ( "short_name", E.string region.shortName )
         , ( "country", E.string region.country )
         , ( "location", LatLng.encoder region.location )
-        , ( "description", E.string region.description )
-        , ( "how_to_access", E.string region.howToAccess )
+        , ( "description", E.nullable E.richText region.description )
+        , ( "how_to_access", E.nullable E.richText region.howToAccess )
         , ( "attractions", E.list Attraction.encoder region.attractions )
         , ( "sectors", E.list Sector.encoder region.sectors )
         ]

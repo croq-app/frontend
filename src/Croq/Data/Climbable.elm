@@ -1,9 +1,12 @@
-module Croq.Data.Climbable exposing (Climbable, decode, encode, normalize, tags)
+module Croq.Data.Climbable exposing (Climbable, decode, encode, tags)
 
 import Croq.Data.ClimbingTechnique as ClimbingTechnique exposing (ClimbingTechnique)
+import Croq.Data.Decode as D
 import Croq.Data.Direction as Direction exposing (Direction)
+import Croq.Data.Encode as E
 import Croq.Data.Rating as Rating exposing (Rating)
 import Croq.Data.Types exposing (..)
+import Croq.Data.Util exposing (normalizeShortName)
 import Croq.Data.Warning as Warning exposing (Warning)
 import Croq.Util exposing (iff)
 import Json.Decode as D
@@ -17,7 +20,7 @@ type alias Climbable id grade extra =
     { id : id
     , name : Name
     , shortName : Name
-    , description : Text
+    , description : Maybe RichText
     , grade : Maybe grade
     , rating : Maybe Rating
     , location : Maybe LatLng
@@ -33,15 +36,6 @@ type alias Climbable id grade extra =
     , betas : List Beta
     , extra : extra
     }
-
-
-normalize : Climbable id grade extra -> Climbable id grade extra
-normalize obj =
-    if obj.shortName == "" then
-        { obj | shortName = obj.name }
-
-    else
-        obj
 
 
 tags : Climbable id grade extra -> List String
@@ -67,9 +61,9 @@ decode id grade =
     in
     D.succeed Climbable
         |> D.required "id" id
-        |> D.required "name" D.string
-        |> D.optional "short_name" D.string ""
-        |> D.optional "description" D.string ""
+        |> D.required "name" D.name
+        |> D.optional "short_name" D.name ""
+        |> D.nullableField "description" D.richText
         |> nullable "grade" grade
         |> nullable "rating" Rating.decoder
         |> nullable "location" LatLng.decoder
@@ -83,7 +77,7 @@ decode id grade =
         |> optList "videos" D.string
         |> optList "images" D.string
         |> optList "betas" D.string
-        |> D.map (\f a -> f a |> normalize)
+        |> D.map (\f a -> f a |> normalizeShortName)
 
 
 encode : (id -> E.Value) -> (grade -> E.Value) -> List ( String, E.Value ) -> Climbable id grade extra -> E.Value
@@ -95,7 +89,8 @@ encode id grade extra obj =
     E.object
         ([ ( "id", id obj.id )
          , ( "name", E.string obj.name )
-         , ( "description", E.string obj.description )
+         , ( "short_name", E.string obj.shortName )
+         , ( "description", E.nullable E.richText obj.description )
          , ( "grade", nullable grade obj.grade )
          , ( "rating", nullable Rating.encoder obj.rating )
          , ( "location", nullable LatLng.encoder obj.location )

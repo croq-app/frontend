@@ -15,9 +15,7 @@ import Daisy.Accordion as Accordion
 import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Lazy exposing (lazy)
 import Http
-import Markdown
 
 
 type alias Model =
@@ -95,7 +93,7 @@ accordionConfig cfg =
                     [ dt [] [ text "Grau:" ]
                     , dd [] [ text (showGrade cfg problem) ]
                     , dt [] [ text "Descrição:" ]
-                    , dd [] [ lazy (Markdown.toHtml []) problem.description ]
+                    , dd [] [ viewOptionalRichText "Sem descrição 😥" problem.description ]
                     ]
                 , a
                     [ href (Routes.boulderProblemUrl problem.id)

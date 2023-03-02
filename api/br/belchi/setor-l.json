@@ -10,7 +10,7 @@
     "sector": {
         "id": "br/belchi/setor-l",
         "name": "L",
-        "type": "route",
+        "kind": "route",
         "location": "-15.7778085192, -48.7921407225",
         "description": "Vias muito boas em belchi",
         "how_to_access": "Pegue a trilha para a esquerda",

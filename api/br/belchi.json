@@ -26,19 +26,19 @@
         {
             "id": "br/belchi/setor-l",
             "name": "L",
-            "type": "route",
+            "kind": "route",
             "location": "-15.7778085192, -48.7921407225"
         },
         {
             "id": "br/belchi/tromba-dagua",
             "name": "Tromba d'água",
-            "type": "route",
+            "kind": "route",
             "location": "-15.7778085192, -48.7921407225"
         },
         {
             "id": "br/belchi/salao-principal",
             "name": "Salão principal",
-            "type": "route",
+            "kind": "route",
             "location": "-15.7778085192, -48.7921407225"
         }
     ]

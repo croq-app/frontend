@@ -51,7 +51,7 @@ appShell cfg onCfg onContent content =
 
 drawer : Cfg.Model -> Html Cfg.Msg
 drawer cfg =
-    div [ class "p-4 w-64 md:w-80 lg:w-90 bg-base-100 lg:bg-base-200 text-base-content flex flex-col content-height fixed" ]
+    div [ class "p-4 w-72 lg:w-80 bg-base-100 lg:bg-base-200 text-base-content flex flex-col content-height fixed" ]
         [ div [ class "flex flex-col" ]
             [ label [ class "py-2" ] [ text "Grau (Via)" ]
             , routeGradeSystemSelector cfg

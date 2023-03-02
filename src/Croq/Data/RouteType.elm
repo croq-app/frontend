@@ -3,6 +3,7 @@ module Croq.Data.RouteType exposing (RouteType(..), decoder, encoder, parse, toS
 import Croq.Data.Util exposing (parsingDecoder, tagParser, tagRender)
 import Json.Decode as D
 import Json.Encode as E
+import Croq.Data.Util exposing (withParseError)
 
 
 type RouteType
@@ -34,4 +35,4 @@ encoder =
 
 decoder : D.Decoder RouteType
 decoder =
-    parsingDecoder "invalid route type" parse
+    parsingDecoder (withParseError "invalid route type" parse)

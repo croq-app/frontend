@@ -202,6 +202,9 @@ sectorUrl kind id =
         Bouldering ->
             boulderSectorUrl id
 
+        Mixed ->
+            routeSectorUrl id
+
 
 boulderFormationUrl : ElemId -> String
 boulderFormationUrl id =

@@ -12,9 +12,7 @@ import Croq.Ui.Carousel as Carousel
 import Daisy.Elements as Ui
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Lazy exposing (lazy)
 import Http
-import Markdown
 
 
 type alias Model =
@@ -66,7 +64,7 @@ view _ m =
                 , Ui.tags (Route.tags elem)
                 , Carousel.view carouselConfig [ "??", "??" ]
                 , Ui.sections []
-                    [ ( "Descrição", [ lazy (Markdown.toHtml []) elem.description ] )
+                    [ ( "Descrição", [ viewOptionalRichText "Sem descrição 😥" elem.description ] )
                     , ( "Vídeos"
                       , [ Ui.urlList [ class "list-disc pl-6" ] ( "Vazio", List.map (\x -> ( x, x )) elem.videos ) ]
                       )

@@ -131,11 +131,9 @@ viewAttractions m =
             else if m.showAttraction then
                 div []
                     [ button [ onClick (OnShowAttraction -1) ] [ text "< back" ]
-                    , text
-                        (List.getAt m.selectedAttraction attractions
-                            |> Maybe.map (\x -> x.description)
-                            |> Maybe.withDefault "internal error"
-                        )
+                    , List.getAt m.selectedAttraction attractions
+                        |> Maybe.map (viewRichText << .description)
+                        |> Maybe.withDefault (text "internal error")
                     ]
 
             else

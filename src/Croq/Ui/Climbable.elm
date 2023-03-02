@@ -2,13 +2,12 @@ module Croq.Ui.Climbable exposing (fullTitle, sections)
 
 import Croq.Data.Climbable exposing (Climbable)
 import Croq.Data.ClimbingTechnique as ClimbingTechnique
+import Croq.Data.Types exposing (viewOptionalRichText)
 import Croq.Data.Warning as Warning
 import Daisy.Elements as Ui
 import Html exposing (a, text)
 import Html.Attributes exposing (class)
-import Html.Lazy exposing (lazy)
 import LatLng
-import Markdown
 import Maybe.Extra as Maybe
 
 
@@ -40,7 +39,7 @@ sections data =
         content =
             text
     in
-    [ ( "Descrição", [ lazy (Markdown.toHtml []) data.description ] )
+    [ ( "Descrição", [ viewOptionalRichText "Sem descrição 😥" data.description ] )
     , ( "Coordenadas", opt locationSection data.location )
     , ( "Altura", opt (\h -> content <| String.fromInt h ++ "m") data.height )
     , ( "Ano de abertura", opt (content << String.fromInt) data.year )

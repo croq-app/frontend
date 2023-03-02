@@ -3,6 +3,7 @@ module Croq.Data.CompletionState exposing (CompletionState(..), decoder, encoder
 import Croq.Data.Util exposing (parsingDecoder, tagParser, tagRender)
 import Json.Decode as D
 import Json.Encode as E
+import Croq.Data.Util exposing (withParseError)
 
 
 type CompletionState
@@ -33,4 +34,4 @@ encoder =
 
 decoder : D.Decoder CompletionState
 decoder =
-    parsingDecoder "invalid route type" parse
+    parsingDecoder (withParseError "invalid route type" parse)

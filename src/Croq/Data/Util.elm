@@ -2,17 +2,25 @@ module Croq.Data.Util exposing (..)
 
 import Json.Decode as D
 import Json.Encode as E
-import Maybe.Extra
 
 
-parsingDecoder : String -> (String -> Maybe a) -> D.Decoder a
-parsingDecoder error parse =
+parsingDecoder : (String -> Result String a) -> D.Decoder a
+parsingDecoder parse =
     D.string
         |> D.andThen
             (\s ->
-                parse s
-                    |> Maybe.Extra.unwrap (D.fail (error ++ ": \"" ++ s ++ "\"")) D.succeed
+                case parse s of
+                    Ok x ->
+                        D.succeed x
+
+                    Err e ->
+                        D.fail e
             )
+
+
+withParseError : String -> (a -> Maybe b) -> (a -> Result String b)
+withParseError err f x =
+    Result.fromMaybe err (f x)
 
 
 renderingEncoder : (a -> String) -> a -> E.Value
@@ -62,14 +70,26 @@ tagRenderOr tags fallback obj =
             fallback obj
 
 
+{-| Normalize records with both a name and shortName by setting any empty value from the other field.
+-}
 normalizeShortName : { a | name : String, shortName : String } -> { a | name : String, shortName : String }
 normalizeShortName m =
+    parseShortName m |> Result.withDefault m
+
+
+{-| Similar to normalizeShortName, but return an error if both elements are empty
+-}
+parseShortName : { a | name : String, shortName : String } -> Result String { a | name : String, shortName : String }
+parseShortName m =
     case ( m.name, m.shortName ) of
+        ( "", "" ) ->
+            Err "both name and shortName are empty"
+
         ( "", _ ) ->
-            { m | name = m.shortName }
+            Ok { m | name = m.shortName }
 
         ( _, "" ) ->
-            { m | shortName = m.name }
+            Ok { m | shortName = m.name }
 
         _ ->
-            m
+            Ok m

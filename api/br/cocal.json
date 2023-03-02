@@ -26,19 +26,19 @@
         {
             "id": "br/cocal/casa-da-cobra",
             "name": "Casa da cobra",
-            "type": "boulder",
+            "kind": "boulder",
             "location": "-15.7778085192, -48.7921407225"
         },
         {
             "id": "br/cocal/cine",
             "name": "Cine/Mocó",
-            "type": "boulder",
+            "kind": "boulder",
             "location": "-15.7778085192, -48.7921407225"
         },
         {
             "id": "br/cocal/alta-tensao",
             "name": "Alta tensão",
-            "type": "boulder",
+            "kind": "boulder",
             "location": "-15.7778085192, -48.7921407225"
         }
     ]
